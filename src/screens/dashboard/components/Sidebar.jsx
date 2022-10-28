@@ -1,8 +1,8 @@
 import React from "react";
 import {MenuItems, items } from "./MenuItems";
-import { Link, NavLink } from "react-router-dom";
+//import { Link, NavLink } from "react-router-dom";
 
-import { useStateContext } from "../contexts/ContextProvider";
+//import { useStateContext } from "../contexts/ContextProvider";
 
 export default function Sidebar({selectedMenu, expanded, handleClick}) {
     return (
