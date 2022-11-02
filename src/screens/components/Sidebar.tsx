@@ -1,11 +1,12 @@
 import React from "react";
-import { MenuItems, items } from "./MenuItems";
+import { items } from "./MenuItems";
 import { Link, NavLink } from "react-router-dom";
 
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { useStateContext } from "../../contexts/ContextProvider";
 
 const Sidebar = () => {
-  const { activeMenu, setActiveMenu, screenSize } = useStateContext();
+  const { activeMenu, setActiveMenu, screenSize } =
+    useStateContext();
   const handleCloseSidebar = () => {
     if (activeMenu && screenSize <= 900) {
       setActiveMenu(false);
@@ -39,15 +40,15 @@ const Sidebar = () => {
                   className="w-8 h-8 mr-2"
                   src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
                 />
-                Cabut Force
+                <span>Cabut Force</span>
               </div>
             </Link>
             <button
               id="Close Sidebar Button"
               type="button"
-              onClick={() => setActiveMenu(!activeMenu)}
+              onClick={() => setActiveMenu(false)}
               className="text-xl rounded-full text-black
-              p-3 hover:bg-light-gray mt-4 block md:hidden
+              p-3 hover:bg-light-gray mt-4 block lg:hidden
               material-symbols-rounded"
             >
               cancel
@@ -59,27 +60,18 @@ const Sidebar = () => {
                 <p className="text-gray-400 m-3 mt-4 uppercase">{item.title}</p>
                 {item.links.map((link) => (
                   <NavLink
-                    to={`/${link.name}`}
-                    key={link.name}
+                    to={`/${link.url}`}
+                    key={link.url}
                     onClick={handleCloseSidebar}
                     className={({ isActive }) =>
                       isActive ? activeLink : normalLink
                     }
                   >
-                    {link.icon}
                     <span className="capitalize">{link.name}</span>
                   </NavLink>
                 ))}
               </div>
             ))}
-          </div>
-          <div className="">
-            <div
-              className={`flex-grid font-bold flex items-center gap-3 py-4 m-3 rounded-lg text-md text-gray-700`}
-            >
-              <button className="capitalize">Logout</button>
-              <span className="material-symbols-rounded">logout</span>
-            </div>
           </div>
         </>
       )}
