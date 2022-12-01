@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+entity user {
+* id: VARCHAR(50)
+--
+name: VARCHAR(255)
+email: VARCHAR(255)
+password: VARCHAR(255)
+role: TEXT
+last_login: LONG
+created_at: LONG
+}
+
+entity pipeline {
+* id: VARCHAR(50)
+--
+* nip: VARCHAR(50)
+name: VARCHAR(255)
+phone_number: VARCHAR(20)
+address: TEXT
+status: enum(FOLLOW_UP, DEAL, LOST)
+product: enum(PLO_HORIZONTAL, PLO_VERTICAL, PLO_SWASTA, KPR, KKB, KMG)
+prospect_date: LONG
+referral_user: VARCHAR(50)
+}
+
+user --{ pipeline
+
+@enduml

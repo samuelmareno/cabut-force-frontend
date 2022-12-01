@@ -33,16 +33,14 @@ const ProfileCard = (props: ProfileCardProps) => {
     >
       <p className="text-center">{props.role}</p>
       <p className="min-w-full bg-gray-500" style={{ height: "1px" }}></p>
-      <div className="flex justify-center p-2 rounded-lg gap-4 hover:bg-light-gray min-w-full font-semibold">
-        <button
-          className="capitalize"
-          onClick={() => {
-            setState({ ...currentState, ["isLoggedIn"]: false });
-            window.open("/", "_self");
-          }}
-        >
-          Logout
-        </button>
+      <div
+        className="flex justify-center p-2 rounded-lg gap-4 hover:bg-light-gray min-w-full font-semibold"
+        onClick={() => {
+          setState({ ...currentState, ["isLoggedIn"]: false });
+          window.open("/", "_self");
+        }}
+      >
+        <button className="capitalize">Logout</button>
         <span className="material-symbols-rounded">logout</span>
       </div>
     </div>
@@ -50,7 +48,8 @@ const ProfileCard = (props: ProfileCardProps) => {
 };
 
 const Navbar = () => {
-  const { activeMenu, setActiveMenu, screenSize, setScreenSize } = useStateContext();
+  const { activeMenu, setActiveMenu, screenSize, setScreenSize } =
+    useStateContext();
   const [showProfileCard, setShowProfileCard] = useState(false);
 
   useEffect(() => {
@@ -73,7 +72,7 @@ const Navbar = () => {
   }, [screenSize]);
 
   useEffect(() => {
-    if(showProfileCard && screenSize <= 900 && activeMenu) {
+    if (showProfileCard && screenSize <= 900 && activeMenu) {
       setShowProfileCard(false);
     }
   }, [activeMenu]);

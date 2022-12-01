@@ -3,15 +3,6 @@ export const items = [
         title: 'Home',
         links: [
             {
-                name: 'home',
-                url: 'home'
-            }
-        ]
-    },
-    {
-        title: 'Dashboard',
-        links: [
-            {
                 name: 'Dashboard',
                 url: 'dashboard'
             }
@@ -24,18 +15,6 @@ export const items = [
                 name: 'Pipeline',
                 url: 'pipeline'
             },
-            {
-                name: 'DSAR',
-                url: 'dsar'
-            },
-            {
-                name: 'Hot Prospect',
-                url: 'hot-prospect'
-            },
-            {
-                name: 'Report',
-                url: 'report'
-            },
         ]
     },
     {
@@ -45,6 +24,10 @@ export const items = [
                 name: 'Change Password',
                 url: 'change-password'
             },
+            {
+                name: 'Logout',
+                url: 'logout'
+            }
         ]
     },
 ]

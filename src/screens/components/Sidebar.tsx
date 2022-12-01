@@ -16,13 +16,15 @@ const Sidebar = () => {
   const activeLink =
     "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg font-semibold bg-blue-700 text-white text-md m-2";
   const normalLink =
-    "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-black hover:text-black hover:bg-gray-100 m-2 duration-300";
+    "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-black hover:text-black hover:bg-gray-100 m-2";
 
   return (
     <div
-      className="ml-3 h-screen
-      md:overflow-hidden overflow-auto 
-      md:hover:overflow-auto pb-10"
+      className={`h-screen ${
+        activeMenu ? "w-72 fixed z-10" : "w-0 z-0"
+      } bg-white
+      md:overflow-hidden overflow-auto
+      md:hover:overflow-auto pb-10 duration-300`}
     >
       {activeMenu && (
         <>
