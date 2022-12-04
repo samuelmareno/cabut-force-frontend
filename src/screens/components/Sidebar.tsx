@@ -28,7 +28,7 @@ const Sidebar = () => {
     >
       {activeMenu && (
         <>
-          <div id="Logo Brand" className="flex justify-between items-center">
+          <div id="Logo Brand" className="flex items-center justify-between">
             <Link
               to="/"
               onClick={handleCloseSidebar}
@@ -39,7 +39,7 @@ const Sidebar = () => {
               <div className="flex items-center text-xl font-semibold text-gray-900">
                 <img
                   alt="logo"
-                  className="w-8 h-8 mr-2"
+                  className="mr-2 h-8 w-8"
                   src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
                 />
                 <span>Cabut Force</span>
@@ -59,7 +59,7 @@ const Sidebar = () => {
           <div id="Dashboard Menu" className="mt-10">
             {items.map((item) => (
               <div key={item.title}>
-                <p className="text-gray-400 m-3 mt-4 uppercase">{item.title}</p>
+                <p className="m-3 mt-4 uppercase text-gray-400">{item.title}</p>
                 {item.links.map((link) => (
                   <NavLink
                     to={`/${link.url}`}

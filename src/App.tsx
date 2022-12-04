@@ -14,7 +14,7 @@ function App() {
   const { activeMenu, currentState, screenSize, showAddProspect } = useStateContext();
 
   return (
-    <div className="w-full relative">
+    <div className="relative w-full">
       {showAddProspect ? <AddProspect />: <></>}
       <BrowserRouter>
         {currentState.isLoggedIn ? (

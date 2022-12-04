@@ -20,11 +20,19 @@ name: VARCHAR(255)
 phone_number: VARCHAR(20)
 address: TEXT
 status: enum(FOLLOW_UP, DEAL, LOST)
-product: enum(PLO_HORIZONTAL, PLO_VERTICAL, PLO_SWASTA, KPR, KKB, KMG)
+product_type: INTEGER
 prospect_date: LONG
 referral_user: VARCHAR(50)
 }
 
+entity product_type {
+ * id: INTEGER (AUTO_INCREMENT)
+ --
+ name: VARCHAR(100)
+}
+
 user --{ pipeline
+
+pipeline --{ product_type
 
 @enduml

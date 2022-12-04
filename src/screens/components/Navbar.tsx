@@ -17,7 +17,7 @@ const NavButton = (props: NavButtonProps) => (
     type="button"
     onClick={props.customFunc}
     style={{ color: props.color }}
-    className="text-2xl material-symbols-rounded rounded-full p-4 hover:bg-light-gray"
+    className="rounded-full p-4 text-2xl material-symbols-rounded hover:bg-light-gray"
   >
     {props.icon}
   </button>
@@ -34,7 +34,7 @@ const ProfileCard = (props: ProfileCardProps) => {
       <p className="text-center">{props.role}</p>
       <p className="min-w-full bg-gray-500" style={{ height: "1px" }}></p>
       <div
-        className="flex justify-center p-2 rounded-lg gap-4 hover:bg-light-gray min-w-full font-semibold"
+        className="flex min-w-full justify-center gap-4 rounded-lg p-2 font-semibold hover:bg-light-gray"
         onClick={() => {
           setState({ ...currentState, ["isLoggedIn"]: false });
           window.open("/", "_self");
@@ -78,7 +78,7 @@ const Navbar = () => {
   }, [activeMenu]);
 
   return (
-    <nav className="flex justify-between p-2 md:mx-2 static">
+    <nav className="static flex justify-between p-2 md:mx-2">
       <NavButton
         icon={"menu"}
         color="blue"
@@ -91,17 +91,17 @@ const Navbar = () => {
         } items-center cursor-pointer`}
       >
         <div
-          className="flex gap-2 items-center p-2 hover:bg-light-gray rounded-lg"
+          className="flex items-center gap-2 rounded-lg p-2 hover:bg-light-gray"
           onClick={() => setShowProfileCard(!showProfileCard)}
         >
           <img
             src="https://www.une.edu/sites/default/files/styles/full_width/public/2021-05/default-person.png?itok=rCP6h0x5"
-            className="rounded-full w-8 h-8"
+            className="h-8 w-8 rounded-full"
             alt="Samuel Mareno"
           />
           <p>
             <span className="text-gray-400 text-14">Hi, </span>
-            <span className="text-gray-400 font-bold ml-1 text-14">
+            <span className="ml-1 font-bold text-gray-400 text-14">
               Samuel Mareno
             </span>
           </p>

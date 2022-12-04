@@ -14,21 +14,21 @@ type TableProps = {
 
 const TableDay = (props: TableProps) => {
     return (
-      <div className="flex-colflex bg-white p-2 m-2 rounded-md shadow-md">
-        <h3 className="font-semibold text-2xl my-2">{props.day}</h3>
+      <div className="m-2 flex flex-col rounded-md bg-white p-2 shadow-md">
+        <h3 className="my-2 text-2xl font-semibold">{props.day}</h3>
         <table className="table-auto rounded-md border-t-1">
           <thead>
-            <tr className="bg-gray-100 border-b-2 border-gray-200">
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+            <tr className="border-b-2 border-gray-200 bg-gray-100">
+              <th className="p-3 text-left text-sm font-semibold tracking-wide">
                 Nama
               </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              <th className="p-3 text-left text-sm font-semibold tracking-wide">
                 Status
               </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              <th className="p-3 text-left text-sm font-semibold tracking-wide">
                 No. Telp
               </th>
-              <th className="p-3 text-sm font-semibold tracking-wide text-left">
+              <th className="p-3 text-left text-sm font-semibold tracking-wide">
                 Keterangan
               </th>
             </tr>
