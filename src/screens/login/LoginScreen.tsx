@@ -1,16 +1,40 @@
-import React from "react";
+import React, {useState} from "react";
 import { useStateContext } from "../../contexts/ContextProvider";
 import useLocalStorage from "../../util/useLocalStorage";
+import WebResponse from "../../util/WebResponse";
 
 const LoginScreen = () => {
   const { currentState, setState } = useStateContext();
 
-  const[name, setName] = useLocalStorage('login', '');
+  const [jwt, setJwt] = useLocalStorage("jwt", "");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const login = async () => {
+    const requestOptions = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: email, password: password})
+    }
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/auth/login', requestOptions)
+      const webResponse: WebResponse<any> = await response.json()
+      setJwt(webResponse.data.token)
+      setJwt("initoken")
+      console.info(webResponse.data.token)
+    } catch (e) {
+        console.error(e)
+    }
+
+    setState({ ...currentState, "isLoggedIn": true });
+    //window.open("/dashboard", "_self");
+  }
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section className="bg-gray-50">
       <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-        <div className="mb-6 flex flex-row items-center text-2xl font-semibold text-gray-900 dark:text-white">
+        <div className="mb-6 flex flex-row items-center text-2xl font-semibold text-gray-900">
           <img
             alt="logo"
             className="mr-2 h-8 w-8"
@@ -19,8 +43,7 @@ const LoginScreen = () => {
           <h2 className="font-bold">CABUT FORCE</h2>
         </div>
         <div
-          className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0
-                            dark:bg-gray-800 dark:border-gray-700"
+          className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0"
         >
           <div className="p-6 space-y-4 sm:p-8 md:space-y-6">
             <div className="flex flex-col items-center justify-center">
@@ -33,20 +56,18 @@ const LoginScreen = () => {
             <form action="#" className="space-y-4 md:space-y-6">
               <div>
                 <label
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                  className="mb-2 block text-sm font-medium text-gray-900"
                   htmlFor="email"
                 >
                   Your email
                 </label>
                 <input
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg
-                        focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
-                        dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500"
+                        focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                   id="email"
                   name="email"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@bankjateng.co.id"
                   required={true}
                   type="text"
@@ -54,53 +75,30 @@ const LoginScreen = () => {
               </div>
               <div>
                 <label
-                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                  className="mb-2 block text-sm font-medium text-gray-900"
                   htmlFor="password"
                 >
                   Password
                 </label>
                 <input
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg
-                        focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
-                        dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-                        dark:focus:border-blue-500"
+                        focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                   id="password"
                   name="password"
                   placeholder="••••••••"
                   required={true}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   type="password"
                 />
               </div>
-              <div className="flex w-full items-center">
-                <div className="flex items-center">
-                  <div className="flex h-5 items-center">
-                    <input
-                      aria-describedby="remember"
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3
-                                       focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600
-                                       dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      id="remember"
-                      type="checkbox"
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label
-                      className="text-gray-500 dark:text-gray-300"
-                      htmlFor="remember"
-                    >
-                      Remember me
-                    </label>
-                  </div>
-                </div>
-              </div>
               <button
                 className="w-full text-white bg-primary-500 hover:bg-primary-700 focus:ring-4
-                    focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center
-                    dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                    focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 id="loginButton"
                 type="button"
                 onClick={(event) => {
-                  setState({ isLoggedIn: true });
+                  login();
                   event.preventDefault();
                 }}
               >

@@ -1,11 +1,9 @@
-import React from 'react';
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const Home = (props: Props) => {
-  return (
-    <div className='bg-white'>Home</div>
-  );
-}
+  return <div className="bg-white">Home</div>;
+};
 
 export default Home;

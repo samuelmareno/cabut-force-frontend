@@ -64,7 +64,7 @@ const Pipeline = () => {
                         value={Moment(currentPipelineDate).format("DD-MM-yyyy")}
                         minDate={handleMinDateToMonday(new Date())}
                         isClearable={false}
-                        className='w-full rounded-lg border-2 border-gray-300 p-2'
+                        className="w-full rounded-lg border-2 border-gray-300 p-2"
                     />
                 </p>
             </section>
