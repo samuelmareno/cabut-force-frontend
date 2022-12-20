@@ -1,21 +1,20 @@
 import React, {useEffect, useState} from "react";
-import {useStateContext} from "../../../contexts/ContextProvider";
+import {UserState, useStateContext} from "../../../contexts/ContextProvider";
 import {pipelineSenin} from "./datadummy";
 import TableDay from "./TableDay";
 import Moment from "moment";
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
+import fetchUser from "../../../util/fetchUser";
+import {useNavigate} from "react-router-dom";
 
 const Pipeline = () => {
-    const {activeMenu, screenSize, setShowAddProspect} = useStateContext();
-
+    const {activeMenu, screenSize, setShowAddProspect, setCurrentState} = useStateContext();
     const [currentPipelineDate, setCurrentPipelineDate] = useState(new Date());
+    const [currentPipelineDateString, setCurrentPipelineDateString] = useState("");
+    const navigate = useNavigate();
 
-    const [currentPipelineDateString, setCurrentPipelineDateString] =
-        useState("");
-
-    const handleDate = (pipelineDate: Date) => {
+    function handleDate(pipelineDate: Date) {
         const day = pipelineDate.getDay();
         const diff = pipelineDate.getDate() - day + (day === 0 ? -6 : 1);
         const mondayDate = new Date(pipelineDate.setDate(diff));
@@ -23,17 +22,24 @@ const Pipeline = () => {
         setCurrentPipelineDate(mondayDate);
         let dateInStringFormat: string = Moment(mondayDate).format("DD MMMM yyyy");
         setCurrentPipelineDateString(dateInStringFormat);
-    };
+    }
 
-    const handleMinDateToMonday = (pipelineDate: Date) => {
+    function handleMinDateToMonday(pipelineDate: Date): Date {
         const day = pipelineDate.getDay();
         const diff = pipelineDate.getDate() - day + (day === 0 ? -6 : 1);
         return new Date(pipelineDate.setDate(diff));
-    };
+    }
 
     useEffect(() => {
         Moment.locale("id");
         handleDate(currentPipelineDate);
+    }, []);
+
+    useEffect(() => {
+        fetchUser()
+            .then((response: UserState) => {
+                    setCurrentState((prevState) => ({...prevState, ...response}));
+            })
     }, []);
 
     return (

@@ -36,7 +36,7 @@ const ProfileCard = (props: ProfileCardProps) => {
             <p className="min-w-full bg-gray-500" style={{height: "1px"}}></p>
             <div
                 className="flex min-w-full justify-center gap-4 rounded-lg p-2 font-semibold hover:bg-light-gray"
-                onClick={async () => {
+                onClick={ () => {
                     localStorage.removeItem("jwt");
                     localStorage.removeItem("state");
                     setCurrentState({} as UserState);

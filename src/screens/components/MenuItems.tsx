@@ -24,10 +24,6 @@ export const items = [
                 name: 'Change Password',
                 url: 'change-password'
             },
-            {
-                name: 'Logout',
-                url: 'logout'
-            }
         ]
     },
 ]

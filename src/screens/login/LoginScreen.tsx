@@ -4,24 +4,22 @@ import WebResponse from "../../util/WebResponse";
 import axios from "axios";
 import {encrypt} from "../../util/crypto";
 import {useNavigate} from "react-router-dom";
+import suspend from "../../util/suspend";
 
 const LoginScreen = () => {
     const {currentState, setCurrentState, setJwt} = useStateContext();
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
     const navigate = useNavigate()
 
     const login = async () => {
         try {
-            const response = await axios.post('api/v1/auth/login', {
+            const response = await axios.post('http://localhost:8080/api/v1/auth/login', {
                 email: email,
                 password: password
             }, {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Allow-Control-Allow-Origin': '*'
+                    'Content-Type': 'application/json'
                 }
             });
             console.log(response);
@@ -30,6 +28,7 @@ const LoginScreen = () => {
             if (token) {
                 token = encrypt(token);
                 setJwt(token);
+                await suspend(1000);
                 setCurrentState({...currentState, "isLoggedIn": true});
                 navigate("/dashboard");
             }

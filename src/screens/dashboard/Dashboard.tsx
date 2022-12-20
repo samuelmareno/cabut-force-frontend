@@ -1,35 +1,19 @@
 import React, {useEffect} from "react";
-import axios from "axios"
 import {UserState, useStateContext} from "../../contexts/ContextProvider";
-import WebResponse from "../../util/WebResponse";
-import {decrypt} from "../../util/crypto";
+import fetchUser from "../../util/fetchUser";
+import {useNavigate} from "react-router-dom";
 
 const Dashboard = () => {
 
-    const {setCurrentState, jwt} = useStateContext();
+    const {setCurrentState} = useStateContext();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const token = decrypt(jwt);
-
-        async function fetchUser() {
-            try {
-                const response = await axios.get("api/v1/users", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                const webResponse: WebResponse<UserState> = await response.data;
-                setCurrentState((prevState) => ({...prevState, ...webResponse.data}));
-
-            } catch (e) {
-                console.error("axios get user", e);
-            }
-        }
-
-        //fetchUser();
+        fetchUser()
+            .then((response: UserState) => {
+                    setCurrentState((prevState) => ({...prevState, ...response}));
+            })
     }, []);
-
 
     return <div>Dashboard</div>;
 };
