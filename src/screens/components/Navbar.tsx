@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {UserState, useStateContext} from "../../contexts/ContextProvider";
-import suspend from "../../util/suspend";
+import {useNavigate} from "react-router-dom";
 
 type NavButtonProps = {
     customFunc: () => void;
@@ -25,6 +25,7 @@ const NavButton = (props: NavButtonProps) => (
 
 const ProfileCard = (props: ProfileCardProps) => {
     const {setCurrentState, currentState} = useStateContext();
+    const navigate = useNavigate();
     return (
         <div
             className={`${
@@ -38,8 +39,8 @@ const ProfileCard = (props: ProfileCardProps) => {
                 onClick={async () => {
                     localStorage.removeItem("jwt");
                     localStorage.removeItem("state");
-                    await suspend(1000);
                     setCurrentState({} as UserState);
+                    navigate("/login");
                 }}
             >
                 <button className="capitalize">Logout</button>
@@ -93,7 +94,7 @@ const Navbar = () => {
             >
                 <div
                     className="flex items-center gap-2 rounded-lg p-2 hover:bg-light-gray"
-                    onClick={() => setShowProfileCard(!showProfileCard)}
+                    onClick={() => setShowProfileCard((prev) => !prev)}
                 >
                     <img
                         src="https://www.une.edu/sites/default/files/styles/full_width/public/2021-05/default-person.png?itok=rCP6h0x5"

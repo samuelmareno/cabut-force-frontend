@@ -3,4 +3,5 @@ interface WebResponse<T> {
     data: T;
     code: number;
 }
+
 export default WebResponse;

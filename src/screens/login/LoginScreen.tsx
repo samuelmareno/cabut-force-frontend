@@ -2,21 +2,16 @@ import React, {useState} from "react";
 import {useStateContext} from "../../contexts/ContextProvider";
 import WebResponse from "../../util/WebResponse";
 import axios from "axios";
-import suspend from "../../util/suspend";
 import {encrypt} from "../../util/crypto";
+import {useNavigate} from "react-router-dom";
 
 const LoginScreen = () => {
     const {currentState, setCurrentState, setJwt} = useStateContext();
 
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    // useEffect(() => {
-    //     if (jwt) {
-    //         setState({...currentState, "isLoggedIn": true});
-    //     }
-    // }, [jwt]);
+    const navigate = useNavigate()
 
     const login = async () => {
         try {
@@ -35,8 +30,8 @@ const LoginScreen = () => {
             if (token) {
                 token = encrypt(token);
                 setJwt(token);
-                await suspend(1000);
                 setCurrentState({...currentState, "isLoggedIn": true});
+                navigate("/dashboard");
             }
         } catch (e) {
             console.error(e)

@@ -15,7 +15,7 @@ export const encrypt = (plaintext: string | any): string => {
 export const decrypt = (ciphertext: string | any) => {
     const bytes = CryptoJS.AES.decrypt(ciphertext, key);
     if (typeof ciphertext === 'object') {
-       return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+        return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
     }
     if (typeof ciphertext === 'string') {
