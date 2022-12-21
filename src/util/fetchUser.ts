@@ -16,7 +16,6 @@ async function fetchUser(): Promise<UserState> {
         });
 
         const webResponse: WebResponse<UserState> = await response.data;
-        console.info(webResponse.data);
         return webResponse.data;
 
     } catch (error: Error | any) {

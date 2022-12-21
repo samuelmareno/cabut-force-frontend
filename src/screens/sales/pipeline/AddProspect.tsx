@@ -23,7 +23,7 @@ const AddProspect = () => {
 
     return (
         <>
-            <div className="flex items-center justify-center fixed right-0 left-0 top-0 bottom-0 z-[100]">
+            <div className="flex items-center justify-center fixed right-0 left-0 top-0 bottom-0 z-[11]">
                 <main className="flex flex-col w-screen md:w-[500px] bg-white shadow-md p-4 m-4 rounded-lg z-10">
                     <section className="flex w-full items-center justify-between">
                         <h3 className="mb-3 text-xl font-semibold text-blue-800 md:text-3xl">

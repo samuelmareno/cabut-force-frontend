@@ -6,13 +6,11 @@ import Moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import fetchUser from "../../../util/fetchUser";
-import {useNavigate} from "react-router-dom";
 
 const Pipeline = () => {
     const {activeMenu, screenSize, setShowAddProspect, setCurrentState} = useStateContext();
     const [currentPipelineDate, setCurrentPipelineDate] = useState(new Date());
     const [currentPipelineDateString, setCurrentPipelineDateString] = useState("");
-    const navigate = useNavigate();
 
     function handleDate(pipelineDate: Date) {
         const day = pipelineDate.getDay();
