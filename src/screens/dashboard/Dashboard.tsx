@@ -11,6 +11,8 @@ const Dashboard = () => {
             .then((response: UserState) => {
                     setCurrentState((prevState) => ({...prevState, ...response}));
             })
+
+        //eslint-disable-next-line
     }, []);
 
     return <div>Dashboard</div>;

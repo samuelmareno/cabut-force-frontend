@@ -1,5 +1,4 @@
 import React, {createContext, useContext, useState} from "react";
-import useLocalStorage from "../util/useLocalStorage";
 
 const StateContext = createContext({} as StateContextProviderProps);
 
@@ -24,15 +23,10 @@ type StateContextProviderProps = {
     setCurrentState: React.Dispatch<React.SetStateAction<UserState>>,
     showAddProspect: boolean,
     setShowAddProspect: React.Dispatch<React.SetStateAction<boolean>>,
-
-    jwt: string | null,
-
-    setJwt: React.Dispatch<React.SetStateAction<string>>,
 }
 
 export const StateContextProvider = ({children}: StateContextProviderProps) => {
     const [activeMenu, setActiveMenu] = useState(true);
-    const [jwt, setJwt] = useLocalStorage("jwt", "");
     const [currentState, setCurrentState] = useState({} as UserState);
     const [screenSize, setScreenSize] = useState(undefined);
     const [showAddProspect, setShowAddProspect] = useState(false);
@@ -47,9 +41,7 @@ export const StateContextProvider = ({children}: StateContextProviderProps) => {
                 screenSize,
                 setScreenSize,
                 showAddProspect,
-                setShowAddProspect,
-                jwt,
-                setJwt
+                setShowAddProspect
             }}
         >
             {children}

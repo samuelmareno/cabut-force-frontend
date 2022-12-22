@@ -20,11 +20,8 @@ const Sidebar = () => {
 
     return (
         <div
-            className={`h-screen ${
-                activeMenu ? "w-72 fixed z-10" : "w-0 z-0"
-            } bg-white
-      md:overflow-hidden overflow-auto
-      md:hover:overflow-auto pb-10 duration-300`}
+            className={`h-screen ${activeMenu ? "w-72 fixed z-10" : "w-0 z-0"} bg-white md:overflow-hidden 
+            overflow-auto md:hover:overflow-auto pb-10 duration-300`}
         >
             {activeMenu && (
                 <>
@@ -49,11 +46,8 @@ const Sidebar = () => {
                             id="Close Sidebar Button"
                             type="button"
                             onClick={() => setActiveMenu(false)}
-                            className="text-xl rounded-full text-black
-              p-3 hover:bg-light-gray mt-4 block lg:hidden
-              material-symbols-rounded"
-                        >
-                            cancel
+                            className="text-xl rounded-full text-black p-3 hover:bg-light-gray mt-4 block lg:hidden
+              material-symbols-rounded">cancel
                         </button>
                     </div>
                     <div id="Dashboard Menu" className="mt-10">
@@ -78,7 +72,8 @@ const Sidebar = () => {
                             localStorage.removeItem("jwt");
                             localStorage.removeItem("state");
                             setCurrentState({} as UserState);
-                            navigate("/login");}
+                            navigate("/login");
+                        }
                         }>Logout</span>
                     </div>
                 </>

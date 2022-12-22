@@ -31,6 +31,8 @@ const Pipeline = () => {
     useEffect(() => {
         Moment.locale("id");
         handleDate(currentPipelineDate);
+
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -38,6 +40,8 @@ const Pipeline = () => {
             .then((response: UserState) => {
                     setCurrentState((prevState) => ({...prevState, ...response}));
             })
+
+        //eslint-disable-next-line
     }, []);
 
     return (
@@ -61,7 +65,7 @@ const Pipeline = () => {
                 >
                     Tambah Prospek
                 </button>
-                <p>
+                <div>
                     <DatePicker
                         selected={currentPipelineDate}
                         onChange={handleDate}
@@ -70,7 +74,7 @@ const Pipeline = () => {
                         isClearable={false}
                         className="w-full rounded-lg border-2 border-gray-300 p-2"
                     />
-                </p>
+                </div>
             </section>
             <section
                 className={`${

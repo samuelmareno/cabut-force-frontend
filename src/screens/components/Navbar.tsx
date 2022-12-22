@@ -38,7 +38,6 @@ const ProfileCard = (props: ProfileCardProps) => {
                 className="flex min-w-full justify-center gap-4 rounded-lg p-2 font-semibold hover:bg-light-gray"
                 onClick={ () => {
                     localStorage.removeItem("jwt");
-                    localStorage.removeItem("state");
                     setCurrentState({} as UserState);
                     navigate("/login");
                 }}
@@ -71,12 +70,16 @@ const Navbar = () => {
         } else {
             setActiveMenu(true);
         }
+
+        // eslint-disable-next-line
     }, [screenSize]);
 
     useEffect(() => {
         if (showProfileCard && screenSize <= 900 && activeMenu) {
             setShowProfileCard(false);
         }
+
+        // eslint-disable-next-line
     }, [activeMenu]);
 
     return (

@@ -1,41 +1,63 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useStateContext} from "../../contexts/ContextProvider";
-import WebResponse from "../../util/WebResponse";
-import axios from "axios";
-import {encrypt} from "../../util/crypto";
 import {useNavigate} from "react-router-dom";
+import useAxiosFunction from "../../hooks/useAxiosFunction";
+import auth from "../../apis/auth";
+import {encrypt} from "../../util/crypto";
 import suspend from "../../util/suspend";
+import useLocalStorage from "../../hooks/useLocalStorage";
+
+type JwtToken = {
+    token: string;
+}
 
 const LoginScreen = () => {
-    const {currentState, setCurrentState, setJwt} = useStateContext();
+    const {currentState, setCurrentState} = useStateContext();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [webResponse, axiosFetch] = useAxiosFunction();
+    const [jwtToken, setJwtToken] = useLocalStorage('jwt', '');
     const navigate = useNavigate()
 
-    const login = async () => {
-        try {
-            const response = await axios.post('http://localhost:8080/api/v1/auth/login', {
+    const login = () => {
+        axiosFetch({
+            axiosInstance: auth,
+            method: "POST",
+            url: "/login",
+            data: {
                 email: email,
                 password: password
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            console.log(response);
-            const webResponse: WebResponse<any> = response.data;
-            let token = webResponse.data.token;
-            if (token) {
-                token = encrypt(token);
-                setJwt(token);
-                await suspend(1000);
-                setCurrentState({...currentState, "isLoggedIn": true});
-                navigate("/dashboard");
-            }
-        } catch (e) {
-            console.error(e)
-        }
+            },
+        }).then();
     }
+
+    useEffect(() => {
+        if (jwtToken) {
+            navigate("/dashboard");
+        }
+
+        // eslint-disable-next-line
+    }, []);
+
+
+    useEffect(() => {
+        if (webResponse) {
+            const handleResponse = async () => {
+                const objectWebResponse: JwtToken = webResponse.data;
+                let token = objectWebResponse.token;
+                if (token) {
+                    token = encrypt(token);
+                    setJwtToken(token);
+                    setCurrentState({...currentState, "isLoggedIn": true});
+                    await suspend(1000);
+                }
+            }
+            handleResponse().then(() => {
+                navigate("/dashboard");
+            });
+        }
+        // eslint-disable-next-line
+    }, [webResponse]);
 
     return (
         <section className="bg-gray-50">

@@ -5,10 +5,10 @@ import {UserState} from "../contexts/ContextProvider";
 import suspend from "./suspend";
 
 async function fetchUser(): Promise<UserState> {
-
     try {
         const jwt = JSON.parse(localStorage.getItem("jwt")!!);
         const token = decrypt(jwt);
+
         const response = await axios.get("http://localhost:8080/api/v1/users", {
             headers: {
                 Authorization: `Bearer ${token}`
