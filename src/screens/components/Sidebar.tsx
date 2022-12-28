@@ -2,10 +2,10 @@ import React from "react";
 import {items} from "./MenuItems";
 import {Link, NavLink, useNavigate} from "react-router-dom";
 
-import {UserState, useStateContext} from "../../contexts/ContextProvider";
+import {useStateContext} from "../../contexts/ContextProvider";
 
 const Sidebar = () => {
-    const {activeMenu, setActiveMenu, screenSize, setCurrentState} = useStateContext();
+    const {activeMenu, setActiveMenu, screenSize} = useStateContext();
     const handleCloseSidebar = () => {
         if (activeMenu && screenSize <= 900) {
             setActiveMenu(false);
@@ -70,8 +70,6 @@ const Sidebar = () => {
                         ))}
                         <span className={`${normalLink} cursor-pointer`} onClick={() => {
                             localStorage.removeItem("jwt");
-                            localStorage.removeItem("state");
-                            setCurrentState({} as UserState);
                             navigate("/login");
                         }
                         }>Logout</span>

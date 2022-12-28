@@ -1,15 +1,16 @@
 import {useEffect, useState} from "react";
+import WebResponse from "../util/WebResponse";
 
 type AxiosConfigObject = {
     axiosInstance: any,
     method: string,
     url: string,
     data?: object,
-    requestConfig: object
+    requestConfig?: object
 }
 
-const useAxiosFunction = () => {
-    const [webResponse, setWebResponse] = useState<any>();
+function useAxiosFunction<T>() {
+    const [webResponse, setWebResponse] = useState<WebResponse<T>>();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState<boolean>(false);
     const [controller, setController] = useState<AbortController>();
@@ -24,6 +25,7 @@ const useAxiosFunction = () => {
         } = configObject;
 
         try {
+            setError("");
             setLoading(true);
             const ctrl = new AbortController();
             setController(ctrl);
@@ -33,7 +35,8 @@ const useAxiosFunction = () => {
             });
             setWebResponse(res.data);
         } catch (err: any) {
-            setError(err.message);
+            console.error("useAxiosFunction", err);
+            setError(err.toString());
         } finally {
             setLoading(false);
         }
@@ -43,7 +46,7 @@ const useAxiosFunction = () => {
         return () => controller?.abort();
     }, [controller]);
 
-    return [webResponse, axiosFetch, loading, error];
+    return {loading, webResponse, axiosFetch, error};
 }
 
 export default useAxiosFunction;

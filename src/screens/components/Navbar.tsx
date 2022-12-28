@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {UserState, useStateContext} from "../../contexts/ContextProvider";
 import {useNavigate} from "react-router-dom";
+import useUserState from "../../hooks/useUserState";
+import {useStateContext} from "../../contexts/ContextProvider";
 
 type NavButtonProps = {
     customFunc: () => void;
@@ -10,6 +11,7 @@ type NavButtonProps = {
 
 type ProfileCardProps = {
     isShow: boolean;
+    role: string;
 };
 
 const NavButton = (props: NavButtonProps) => (
@@ -24,7 +26,6 @@ const NavButton = (props: NavButtonProps) => (
 );
 
 const ProfileCard = (props: ProfileCardProps) => {
-    const {setCurrentState, currentState} = useStateContext();
     const navigate = useNavigate();
     return (
         <div
@@ -32,13 +33,12 @@ const ProfileCard = (props: ProfileCardProps) => {
                 props.isShow ? "flex flex-col" : "hidden"
             } absolute items-center justify-center gap-4 min-w-full md:w-[250px] right-0 bg-white rounded-lg p-2 mt-2 shadow-md`}
         >
-            <p className="text-center">{currentState.role}</p>
+            <p className="text-center">{props.role}</p>
             <p className="min-w-full bg-gray-500" style={{height: "1px"}}></p>
             <div
                 className="flex min-w-full justify-center gap-4 rounded-lg p-2 font-semibold hover:bg-light-gray"
                 onClick={ () => {
                     localStorage.removeItem("jwt");
-                    setCurrentState({} as UserState);
                     navigate("/login");
                 }}
             >
@@ -50,8 +50,9 @@ const ProfileCard = (props: ProfileCardProps) => {
 };
 
 const Navbar = () => {
-    const {activeMenu, setActiveMenu, screenSize, setScreenSize, currentState} = useStateContext();
+    const {activeMenu, setActiveMenu, screenSize, setScreenSize} = useStateContext();
     const [showProfileCard, setShowProfileCard] = useState(false);
+   const userState = useUserState();
 
     useEffect(() => {
         const handleResize = () => setScreenSize(window.innerWidth);
@@ -82,6 +83,9 @@ const Navbar = () => {
         // eslint-disable-next-line
     }, [activeMenu]);
 
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     return (
         <nav className="static flex justify-between p-2 md:mx-2">
             <NavButton
@@ -107,13 +111,14 @@ const Navbar = () => {
                     <p>
                         <span className="text-gray-400 text-14">Hi, </span>
                         <span className="ml-1 font-bold text-gray-400 text-14">
-              {currentState.name}
+              {userState.name}
             </span>
                     </p>
                 </div>
 
                 <ProfileCard
                     isShow={showProfileCard}
+                    role={userState.role}
                 />
             </div>
         </nav>

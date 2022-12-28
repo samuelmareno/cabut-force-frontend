@@ -1,8 +1,8 @@
 import {createBrowserRouter, RouterProvider,} from "react-router-dom";
 import Root from "./screens/Root";
-import Dashboard from "./screens/dashboard/Dashboard";
-import Pipeline from "./screens/sales/pipeline/Pipeline";
-import LoginScreen from "./screens/login/LoginScreen";
+import DashboardPage from "./screens/dashboard/DashboardPage";
+import PipelinePage from "./screens/sales/pipeline/PipelinePage";
+import LoginPage from "./screens/login/LoginPage";
 import {ErrorPage} from "./screens/components/ErrorPage";
 import ChangePassword from "./screens/settings/change-password/ChangePassword";
 
@@ -16,11 +16,11 @@ function App() {
             children: [
                 {
                     path: "/dashboard",
-                    element: <Dashboard/>,
+                    element: <DashboardPage/>,
                 },
                 {
                     path: "/pipeline",
-                    element: <Pipeline/>
+                    element: <PipelinePage/>
                 },
                 {
                     path: "/change-password",
@@ -30,7 +30,7 @@ function App() {
         },
         {
             path: "/login",
-            element: <LoginScreen/>
+            element: <LoginPage/>
         }
     ]);
 
