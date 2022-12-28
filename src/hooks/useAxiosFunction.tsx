@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import WebResponse from "../util/WebResponse";
+import {useNavigate} from "react-router-dom";
 
 type AxiosConfigObject = {
     axiosInstance: any,
@@ -14,6 +15,7 @@ function useAxiosFunction<T>() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState<boolean>(false);
     const [controller, setController] = useState<AbortController>();
+    const navigate = useNavigate();
 
     const axiosFetch = async (configObject: AxiosConfigObject) => {
         const {
@@ -36,6 +38,10 @@ function useAxiosFunction<T>() {
             setWebResponse(res.data);
         } catch (err: any) {
             console.error("useAxiosFunction", err);
+            if (err.response.status === 401) {
+                localStorage.removeItem("jwt");
+                navigate("/login");
+            }
             setError(err.toString());
         } finally {
             setLoading(false);

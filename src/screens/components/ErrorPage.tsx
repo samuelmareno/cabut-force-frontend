@@ -1,6 +1,8 @@
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 export function ErrorPage() {
+
+    const navigate = useNavigate();
     return (
         <>
             <main className="h-screen w-full flex flex-col justify-center items-center bg-[#1A2238]">
@@ -17,7 +19,7 @@ export function ErrorPage() {
         ></span>
 
                         <span className="relative block px-8 py-3 bg-[#1A2238] border border-current">
-          <Link to="/dashboard">Go Home</Link>
+          <button onClick={() => navigate("/")}>Go Home</button>
         </span>
                     </span>
                 </button>

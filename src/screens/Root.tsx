@@ -1,7 +1,7 @@
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import {useStateContext} from "../contexts/ContextProvider";
-import {Outlet, useNavigate} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import AddProspect from "./sales/pipeline/AddProspect";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -10,6 +10,7 @@ export default function Root() {
     const {activeMenu, screenSize, showAddProspect} = useStateContext();
     const [jwtToken] = useLocalStorage('jwt', '');
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         if (!jwtToken) {
@@ -18,6 +19,13 @@ export default function Root() {
 
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        if (location.pathname === "/") {
+            navigate("/dashboard");
+        }
+    });
+
 
     return (
         <>
