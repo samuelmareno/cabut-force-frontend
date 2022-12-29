@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'http://localhost:8080/api/v1/users';
+const BASE_URL = `${process.env.REACT_APP_BASE_URL}/users`;
 
 export default function users(token: string){
     return axios.create({

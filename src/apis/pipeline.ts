@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = 'http://localhost:8080/api/v1/pipelines';
+const BASE_URL = `${process.env.REACT_APP_BASE_URL}/pipelines`;
 
 export default function users(token: string){
     return axios.create({

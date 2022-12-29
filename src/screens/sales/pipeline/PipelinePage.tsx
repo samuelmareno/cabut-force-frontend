@@ -9,6 +9,7 @@ import useLocalStorage from "../../../hooks/useLocalStorage";
 import {decrypt} from "../../../util/crypto";
 import {PipelineModel} from "./pipeline-model";
 import TableDay from "./TableDay";
+import updateLogger from "../../../util/update-logger";
 
 const PipelinePage = () => {
     const [jwt] = useLocalStorage('jwt', '');
@@ -29,11 +30,7 @@ const PipelinePage = () => {
     useEffect(() => {
 
         if (webResponse) {
-            console.log(webResponse.data as PipelineModel[]);
-            const pipelines: PipelineModel[] = webResponse.data;
-            pipelines.forEach(pipeline => {
-                console.log(Moment(pipeline.prospectDate).format("dddd"))
-            })
+            updateLogger(webResponse.data);
         }
     }, [webResponse]);
 
@@ -73,7 +70,7 @@ const PipelinePage = () => {
                         onChange={(event) => {
                             setDay(event.currentTarget.value);
                             event.preventDefault();
-                            }
+                        }
                         }
                     >
                         <option value="Monday">Senin</option>
@@ -99,7 +96,7 @@ const PipelinePage = () => {
             <section>
                 {!webResponse && !error && loading && (
                     <div role="status"
-                    className="w-full flex justify-center items-center">
+                         className="w-full flex justify-center items-center">
                         <svg aria-hidden="true"
                              className="w-12 h-12 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                              viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

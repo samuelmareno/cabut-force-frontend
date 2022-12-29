@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
-import WebResponse from "../util/WebResponse";
+import WebResponse from "../util/web-response";
 import {useNavigate} from "react-router-dom";
+import updateLogger from "../util/update-logger";
 
 type AxiosConfigObject = {
     axiosInstance: any,
@@ -36,8 +37,9 @@ function useAxiosFunction<T>() {
                 signal: ctrl.signal
             });
             setWebResponse(res.data);
+            updateLogger(res.data);
         } catch (err: any) {
-            console.error("useAxiosFunction", err);
+            updateLogger(err);
             if (err.response.status === 401) {
                 localStorage.removeItem("jwt");
                 navigate("/login");

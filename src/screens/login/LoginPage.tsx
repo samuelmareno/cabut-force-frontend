@@ -62,7 +62,7 @@ const LoginPage = () => {
                         className="mr-2 h-8 w-8"
                         src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
                     />
-                    <h2 className="font-bold">CABUT FORCE</h2>
+                    <h2 className="font-bold">CABUT FORCE {process.env.NODE_ENV}</h2>
                 </div>
                 <div
                     className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0"
