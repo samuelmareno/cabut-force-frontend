@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useStateContext} from "../../../contexts/ContextProvider";
+
 import updateLogger from "../../../util/update-logger";
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
 import {PipelineModel} from "./pipeline-model";
@@ -7,8 +7,11 @@ import axios from "../../../apis/pipeline";
 import {decrypt} from "../../../util/crypto";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 
-const AddProspect = () => {
-    const {setShowAddProspect} = useStateContext();
+type Props = {
+    onDismissClick: () => void;
+}
+
+const AddProspect = (props: Props) => {
     const [currentProspekItem, setCurrentProspekItem] = useState({
         status: "follow_up",
         productType: 1,
@@ -27,7 +30,7 @@ const AddProspect = () => {
             method: "POST",
             url: "/",
             data: currentProspekItem,
-        })
+        }).then();
     }
 
     useEffect(() => {
@@ -53,7 +56,7 @@ const AddProspect = () => {
                         </h3>
                         <button
                             className="font-bold text-black material-symbols-rounded"
-                            onClick={() => setShowAddProspect((previous) => !previous)}
+                            onClick={props.onDismissClick}
                         >
                             close
                         </button>
@@ -168,7 +171,7 @@ const AddProspect = () => {
                                 <button
                                     className="mt-4 cursor-pointer rounded-lg bg-red-600 px-4 py-2 font-bold text-white"
                                     onClick={(e) => {
-                                        setShowAddProspect((previous) => !previous);
+                                        props.onDismissClick();
                                         e.preventDefault();
                                     }}
                                 >
@@ -181,8 +184,8 @@ const AddProspect = () => {
                 </main>
                 <div
                     className="absolute top-0 right-0 bottom-0 left-0 bg-black bg-opacity-70"
-                    onClick={() => setShowAddProspect((previous) => !previous)}
-                ></div>
+                    onClick={props.onDismissClick}
+                />
             </div>
         </>
     );

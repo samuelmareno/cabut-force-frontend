@@ -3,11 +3,10 @@ import Sidebar from "./components/Sidebar";
 import {useStateContext} from "../contexts/ContextProvider";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {useEffect} from "react";
-import AddProspect from "./sales/pipeline/AddProspect";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Root() {
-    const {activeMenu, screenSize, showAddProspect} = useStateContext();
+    const {activeMenu, screenSize} = useStateContext();
     const [jwtToken] = useLocalStorage('jwt', '');
     const navigate = useNavigate();
     const location = useLocation();
@@ -29,7 +28,6 @@ export default function Root() {
 
     return (
         <>
-            {showAddProspect && <AddProspect />}
             <div className="flex">
                 <div
                     className={`${

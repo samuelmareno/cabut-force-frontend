@@ -10,6 +10,7 @@ import {useEffect} from "react";
 type TableProps = {
     day: string;
     pipeline: PipelineModel[];
+    onEditClick: (pipelineModel: PipelineModel) => void;
 };
 
 
@@ -106,7 +107,7 @@ const TableDay = (props: TableProps) => {
                             <button
                                 disabled={loading}
                                 type="button"
-                                onClick={() => alert(`Edit ${value.id}`)}
+                                onClick={() => props.onEditClick(value)}
                                 className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md my-2"
                             >Ubah
                             </button>

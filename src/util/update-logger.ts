@@ -1,4 +1,4 @@
-export default function updateLogger(value: any) {
+export default function updateLogger(...data: any[]) {
     if (process.env.NODE_ENV !== "production")
-        console.log(value);
+        console.log(...data);
 }

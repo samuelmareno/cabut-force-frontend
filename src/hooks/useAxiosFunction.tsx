@@ -45,7 +45,7 @@ function useAxiosFunction<T>() {
                 localStorage.removeItem("jwt");
                 navigate("/login");
             }
-            setError(err.toString());
+            setError(err.message);
         } finally {
             setLoading(false);
         }
