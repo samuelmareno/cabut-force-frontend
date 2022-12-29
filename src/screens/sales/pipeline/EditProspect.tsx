@@ -1,47 +1,20 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {useStateContext} from "../../../contexts/ContextProvider";
-import updateLogger from "../../../util/update-logger";
-import useAxiosFunction from "../../../hooks/useAxiosFunction";
 import {PipelineModel} from "./pipeline-model";
-import axios from "../../../apis/pipeline";
-import {decrypt} from "../../../util/crypto";
-import useLocalStorage from "../../../hooks/useLocalStorage";
 
-const AddProspect = () => {
+type EditProspectProps = {
+    pipelineModel: PipelineModel;
+    onSubmitClick: () => void;
+    onCancelClick: () => void;
+}
+
+const EditProspect = (props: EditProspectProps) => {
     const {setShowAddProspect} = useStateContext();
-    const [currentProspekItem, setCurrentProspekItem] = useState({
-        status: "follow_up",
-        productType: 1,
-        prospectDate: 0
-    });
-    const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineModel>();
-    const [jwtToken] = useLocalStorage('jwt', '');
+    let editablePipelineModel = {...props.pipelineModel};
+
     const handleProspekItem = (key: string, value: any) => {
-        setCurrentProspekItem({...currentProspekItem, [key]: value});
-    };
-
-    const handleSubmit = () => {
-        updateLogger(currentProspekItem);
-        axiosFetch({
-            axiosInstance: axios(decrypt(jwtToken)),
-            method: "POST",
-            url: "/",
-            data: currentProspekItem,
-        })
+        editablePipelineModel = {...editablePipelineModel, [key]: value};
     }
-
-    useEffect(() => {
-        if (webResponse) {
-            updateLogger(`success create pipeline, ${webResponse}`);
-            window.location.reload();
-        }
-    })
-
-    useEffect(() => {
-        if (error) {
-            updateLogger(error);
-        }
-    }, [error])
 
     return (
         <>
@@ -53,7 +26,7 @@ const AddProspect = () => {
                         </h3>
                         <button
                             className="font-bold text-black material-symbols-rounded"
-                            onClick={() => setShowAddProspect((previous) => !previous)}
+                            onClick={props.onCancelClick}
                         >
                             close
                         </button>
@@ -64,6 +37,7 @@ const AddProspect = () => {
                                 Nama *:
                                 <input
                                     type="text"
+                                    value={editablePipelineModel.name}
                                     name="name"
                                     required={true}
                                     onChange={(e) =>
@@ -82,7 +56,7 @@ const AddProspect = () => {
                                     onChange={(e) =>
                                         handleProspekItem("status", e.currentTarget.value)
                                     }
-                                    defaultValue="follow_up"
+                                    defaultValue="baru"
                                 >
                                     <option value="follow_up">Follow Up</option>
                                     <option value="deal">Deal</option>
@@ -126,13 +100,23 @@ const AddProspect = () => {
                                 />
                             </label>
                             <label>
-                                NIP *:
+                                Email:
+                                <input
+                                    type="email"
+                                    className="mt-2 block w-full rounded-md border-gray-300 shadow-sm
+                                 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    onChange={(e) =>
+                                        handleProspekItem("email", e.currentTarget.value)
+                                    }
+                                />
+                            </label>
+                            <label>
+                                No. KTP:
                                 <input
                                     type="text"
-                                    className="mt-2 block w-full rounded-md border-gray-300 shadow-sm
-                                    focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     onChange={(e) =>
-                                        handleProspekItem("nip", e.currentTarget.value)
+                                        handleProspekItem("noKtp", e.currentTarget.value)
                                     }
                                 />
                             </label>
@@ -142,34 +126,33 @@ const AddProspect = () => {
                                     name="product"
                                     id="product"
                                     className="w-full rounded-md border-gray-300 border-1"
-                                    onChange={(e) => handleProspekItem("productType", Number(e.currentTarget.value))
+                                    onChange={(e) =>
+                                        handleProspekItem("product", e.currentTarget.value)
                                     }
                                 >
-                                    <option value={1}>PLO Horizontal</option>
-                                    <option value={2}>PLO Vertical</option>
-                                    <option value={3}>PLO Pensiunan</option>
-                                    <option value={4}>PLO Swasta</option>
-                                    <option value={5}>KPR</option>
-                                    <option value={6}>KKB</option>
-                                    <option value={7}>KMG</option>
+                                    <option value="PLO_HORIZONTAL">PLO Horizontal</option>
+                                    <option value="PLO_VERTICAL">PLO Vertical</option>
+                                    <option value="PLO_PENSIUNAN">PLO Pensiunan</option>
+                                    <option value="PLO_SWASTA">PLO Swasta</option>
+                                    <option value="KPR">KPR</option>
+                                    <option value="KKB">KKB</option>
+                                    <option value="KMG">KMG</option>
                                 </select>
                             </label>
                             <div className="flex w-full items-center justify-center space-x-4">
                                 <button
-                                    disabled={loading}
                                     className="mt-4 cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-bold text-white"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        handleSubmit();
                                     }}
                                 >
-                                    {loading ? "Loading..." : "Submit"}
+                                    Submit
                                 </button>
                                 <button
                                     className="mt-4 cursor-pointer rounded-lg bg-red-600 px-4 py-2 font-bold text-white"
                                     onClick={(e) => {
-                                        setShowAddProspect((previous) => !previous);
                                         e.preventDefault();
+                                        props.onCancelClick();
                                     }}
                                 >
                                     Cancel
@@ -188,15 +171,4 @@ const AddProspect = () => {
     );
 };
 
-export default AddProspect;
-
-/* <label>
-              Keterangan:
-              <input
-                type="text"
-                className="mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                onChange={(e) =>
-                  handleProspekItem("noKtp", e.currentTarget.value)
-                }
-              />
-            </label> */
+export default EditProspect;

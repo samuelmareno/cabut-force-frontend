@@ -28,6 +28,7 @@ function useAxiosFunction<T>() {
         } = configObject;
 
         try {
+            setWebResponse(undefined);
             setError("");
             setLoading(true);
             const ctrl = new AbortController();

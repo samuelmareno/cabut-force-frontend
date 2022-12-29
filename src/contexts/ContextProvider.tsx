@@ -10,12 +10,15 @@ type StateContextProviderProps = {
     setScreenSize: React.Dispatch<React.SetStateAction<any>>,
     showAddProspect: boolean,
     setShowAddProspect: React.Dispatch<React.SetStateAction<boolean>>,
+    showEditProspect: boolean,
+    setShowEditProspect: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export const StateContextProvider = ({children}: StateContextProviderProps) => {
     const [activeMenu, setActiveMenu] = useState(true);
     const [screenSize, setScreenSize] = useState(undefined);
     const [showAddProspect, setShowAddProspect] = useState(false);
+    const [showEditProspect, setShowEditProspect] = useState(false);
 
     return (
         <StateContext.Provider
@@ -25,7 +28,9 @@ export const StateContextProvider = ({children}: StateContextProviderProps) => {
                 screenSize,
                 setScreenSize,
                 showAddProspect,
-                setShowAddProspect
+                setShowAddProspect,
+                showEditProspect,
+                setShowEditProspect,
             }}
         >
             {children}

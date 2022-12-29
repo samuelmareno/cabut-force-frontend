@@ -9,7 +9,6 @@ import useLocalStorage from "../../../hooks/useLocalStorage";
 import {decrypt} from "../../../util/crypto";
 import {PipelineModel} from "./pipeline-model";
 import TableDay from "./TableDay";
-import updateLogger from "../../../util/update-logger";
 
 const PipelinePage = () => {
     const [jwt] = useLocalStorage('jwt', '');
@@ -28,17 +27,16 @@ const PipelinePage = () => {
     }, []);
 
     useEffect(() => {
-
-        if (webResponse) {
-            updateLogger(webResponse.data);
-        }
-    }, [webResponse]);
-
-    useEffect(() => {
         if (error) {
             alert(error);
         }
     }, [error]);
+
+    useEffect(() => {
+        handleGetPipeline();
+
+        // eslint-disable-next-line
+    }, [currentPipelineDate]);
 
 
     return (
@@ -64,12 +62,12 @@ const PipelinePage = () => {
                         Tambah Prospek
                     </button>
                     <select
-                        name="product"
+                        name="pipeline-day"
                         id="product"
                         className="rounded-md border-gray-300 border-1"
                         onChange={(event) => {
-                            setDay(event.currentTarget.value);
                             event.preventDefault();
+                            setDay(event.currentTarget.value);
                         }
                         }
                     >
@@ -85,7 +83,11 @@ const PipelinePage = () => {
                 <div>
                     <DatePicker
                         selected={currentPipelineDate}
-                        onChange={handleDate}
+                        onChange={(date, event) => {
+                            event?.preventDefault();
+                            handleDate(date ?? new Date());
+                        }
+                        }
                         value={Moment(currentPipelineDate).format("DD-MM-yyyy")}
                         minDate={handleMinDateToMonday(new Date())}
                         isClearable={false}
@@ -118,24 +120,23 @@ const PipelinePage = () => {
     function handleDate(pipelineDate: Date) {
         const day = pipelineDate.getDay();
         const diff = pipelineDate.getDate() - day + (day === 0 ? -6 : 1);
-        const mondayDate = new Date(pipelineDate.setDate(diff));
+        pipelineDate.setDate(diff);
 
-        setCurrentPipelineDate(mondayDate);
-        let dateInStringFormat: string = Moment(mondayDate).format("DD MMMM yyyy");
+        setCurrentPipelineDate(pipelineDate);
+        let dateInStringFormat: string = Moment(pipelineDate).format("DD MMMM yyyy");
         setCurrentPipelineDateString(dateInStringFormat);
-        handleGetPipeline();
     }
 
-    function handleMinDateToMonday(pipelineDate: Date): Date {
-        const day = pipelineDate.getDay();
-        const diff = pipelineDate.getDate() - day + (day === 0 ? -6 : 1);
-        return new Date(pipelineDate.setDate(diff));
+    function handleMinDateToMonday(currentDate: Date): Date {
+        const day = currentDate.getDay();
+        const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1);
+        currentDate.setDate(diff)
+        return currentDate;
     }
 
     function handleGetPipeline() {
-        const date = currentPipelineDate;
-        date.setHours(0, 0, 0, 0);
-        const startDate = date.getTime();
+        currentPipelineDate.setHours(0, 0, 0, 0);
+        const startDate = currentPipelineDate.getTime();
         const endDate = startDate + 518400000; // milliseconds in 6 days
         axiosFetch({
             axiosInstance: axios(decrypt(jwt)),
