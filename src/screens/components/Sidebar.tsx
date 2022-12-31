@@ -21,7 +21,7 @@ const Sidebar = () => {
     return (
         <div
             className={`h-screen ${activeMenu ? "w-72 fixed z-10" : "w-0 z-0"} bg-white md:overflow-hidden 
-            overflow-auto md:hover:overflow-auto pb-10 duration-300`}
+            overflow-auto md:hover:overflow-auto pb-10`}
         >
             {activeMenu && (
                 <>
