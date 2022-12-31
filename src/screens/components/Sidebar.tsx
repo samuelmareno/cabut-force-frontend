@@ -28,7 +28,6 @@ const Sidebar = () => {
                     <div id="Logo Brand" className="flex items-center justify-between">
                         <Link
                             to="/"
-                            onClick={handleCloseSidebar}
                             className="items-center gap-3 ml-3
               mt-4 flex text-xl font-extrabold
               text-slate-900"
