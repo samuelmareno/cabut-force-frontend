@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 
 import updateLogger from "../../../util/update-logger";
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
-import {PipelineModel} from "./pipeline-model";
+import {PipelineResponse} from "./pipeline-model";
 import axios from "../../../apis/pipeline";
 import {decrypt} from "../../../util/crypto";
 import useLocalStorage from "../../../hooks/useLocalStorage";
@@ -17,7 +17,7 @@ const AddProspect = (props: Props) => {
         productType: 1,
         prospectDate: 0
     });
-    const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineModel>();
+    const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineResponse>();
     const [jwtToken] = useLocalStorage('jwt', '');
     const handleProspekItem = (key: string, value: any) => {
         setCurrentProspekItem({...currentProspekItem, [key]: value});

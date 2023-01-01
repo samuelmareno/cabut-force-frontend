@@ -1,4 +1,4 @@
-export type PipelineModel = {
+export type PipelineResponse = {
     id: string;
     nip: string;
     name: string;
@@ -8,6 +8,17 @@ export type PipelineModel = {
     productType: ProductType;
     prospectDate: number;
     referralUser: string;
+}
+
+export type UpdatePipelineRequest = {
+    id: string;
+    nip: string;
+    name: string;
+    phoneNumber: string;
+    address: string | null;
+    status: string;
+    productType: number;
+    prospectDate: number;
 }
 
 export type TablePipelineModel = {

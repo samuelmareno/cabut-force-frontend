@@ -1,4 +1,4 @@
-import {PipelineModel, TablePipelineModel} from "./pipeline-model";
+import {PipelineResponse, TablePipelineModel} from "./pipeline-model";
 import Moment from "moment";
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
 import axios from "../../../apis/pipeline";
@@ -9,8 +9,8 @@ import {useEffect} from "react";
 
 type TableProps = {
     day: string;
-    pipeline: PipelineModel[];
-    onEditClick: (pipelineModel: PipelineModel) => void;
+    pipeline: PipelineResponse[];
+    onEditClick: (pipelineModel: PipelineResponse) => void;
 };
 
 

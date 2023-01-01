@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {PipelineModel} from "./pipeline-model";
+import {PipelineResponse, UpdatePipelineRequest} from "./pipeline-model";
 import Moment from "moment";
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
 import {decrypt} from "../../../util/crypto";
@@ -8,34 +8,36 @@ import useLocalStorage from "../../../hooks/useLocalStorage";
 import updateLogger from "../../../util/update-logger";
 
 type EditProspectProps = {
-    pipelineModel: PipelineModel;
+    pipelineModel: PipelineResponse;
     onCancelClick: () => void;
 }
 
 const EditProspect = (props: EditProspectProps) => {
-    const [editablePipelineModel, setEditablePipelineModel] = useState({...props.pipelineModel});
+    const [updatePipelineRequest, setUpdatePipelineRequest] = useState<UpdatePipelineRequest>({
+        id: props.pipelineModel.id,
+        nip: props.pipelineModel.nip,
+        name: props.pipelineModel.name,
+        phoneNumber: props.pipelineModel.phoneNumber,
+        address: props.pipelineModel.address,
+        status: props.pipelineModel.status,
+        productType: props.pipelineModel.productType.id,
+        prospectDate: props.pipelineModel.prospectDate,
+    });
     const [jwt] = useLocalStorage('jwt', '');
+
     const handleProspekItem = (key: string, value: any) => {
-        console.log(key, value);
-        setEditablePipelineModel({...editablePipelineModel, [key]: value});
+        updateLogger(key, value);
+        setUpdatePipelineRequest({...updatePipelineRequest, [key]: value});
     }
-    const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineModel>();
+    const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineResponse>();
 
     const handleSubmit = () => {
         axiosFetch({
             axiosInstance: axios(decrypt(jwt)),
             method: "PUT",
             url: `/`,
-            data: {
-                id: editablePipelineModel.id,
-                nip: editablePipelineModel.nip,
-                name: editablePipelineModel.name,
-                phoneNumber: editablePipelineModel.phoneNumber,
-                address: editablePipelineModel.address,
-                status: editablePipelineModel.status,
-                productType: editablePipelineModel.productType,
-                prospectDate: editablePipelineModel.prospectDate
-            }
+            data: updatePipelineRequest
+
         }).then();
     }
 
@@ -74,7 +76,7 @@ const EditProspect = (props: EditProspectProps) => {
                                 Nama *:
                                 <input
                                     type="text"
-                                    value={editablePipelineModel.name}
+                                    value={updatePipelineRequest.name}
                                     name="name"
                                     required={true}
                                     onChange={(e) =>
@@ -89,7 +91,7 @@ const EditProspect = (props: EditProspectProps) => {
                                 <select
                                     name="status"
                                     id="status"
-                                    value={editablePipelineModel.status}
+                                    value={updatePipelineRequest.status}
                                     className="w-full rounded-md border-gray-300 border-1"
                                     onChange={(e) =>
                                         handleProspekItem("status", e.currentTarget.value)
@@ -105,7 +107,7 @@ const EditProspect = (props: EditProspectProps) => {
                                 Rencana Follow-up:
                                 <input
                                     type="date"
-                                    value={Moment(editablePipelineModel.prospectDate).format("YYYY-MM-DD")}
+                                    value={Moment(updatePipelineRequest.prospectDate).format("YYYY-MM-DD")}
                                     onChange={(e) =>
                                         handleProspekItem(
                                             "prospectDate",
@@ -120,7 +122,7 @@ const EditProspect = (props: EditProspectProps) => {
                                 Alamat *:
                                 <input
                                     type="text"
-                                    value={editablePipelineModel.address ?? ""}
+                                    value={updatePipelineRequest.address ?? ""}
                                     className="mt-2 block w-full rounded-md border-gray-300 shadow-sm
                                  focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     onChange={(e) =>
@@ -132,7 +134,7 @@ const EditProspect = (props: EditProspectProps) => {
                                 No. Telp *:
                                 <input
                                     type="text"
-                                    value={editablePipelineModel.phoneNumber}
+                                    value={updatePipelineRequest.phoneNumber}
                                     className="mt-2 block w-full rounded-md border-gray-300 shadow-sm
                                  focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     onChange={(e) =>
@@ -144,11 +146,11 @@ const EditProspect = (props: EditProspectProps) => {
                                 NIP *:
                                 <input
                                     type="email"
-                                    value={editablePipelineModel.nip}
+                                    value={updatePipelineRequest.nip}
                                     className="mt-2 block w-full rounded-md border-gray-300 shadow-sm
                                  focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     onChange={(e) =>
-                                        handleProspekItem("email", e.currentTarget.value)
+                                        handleProspekItem("nip", e.currentTarget.value)
                                     }
                                 />
                             </label>
@@ -157,7 +159,7 @@ const EditProspect = (props: EditProspectProps) => {
                                 <select
                                     name="product"
                                     id="product"
-                                    value={editablePipelineModel.productType.id}
+                                    value={updatePipelineRequest.productType}
                                     className="w-full rounded-md border-gray-300 border-1"
                                     onChange={(e) =>
                                         handleProspekItem("productType", Number(e.currentTarget.value))

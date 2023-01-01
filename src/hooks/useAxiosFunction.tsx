@@ -13,7 +13,7 @@ type AxiosConfigObject = {
 
 function useAxiosFunction<T>() {
     const [webResponse, setWebResponse] = useState<WebResponse<T>>();
-    const [error, setError] = useState("");
+    const [error, setError] = useState<any>();
     const [loading, setLoading] = useState<boolean>(false);
     const [controller, setController] = useState<AbortController>();
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ function useAxiosFunction<T>() {
                 localStorage.removeItem("jwt");
                 navigate("/login");
             }
-            setError(err.message);
+            setError(err);
         } finally {
             setLoading(false);
         }

@@ -6,7 +6,7 @@ import axios from "../../../apis/pipeline"
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import {decrypt} from "../../../util/crypto";
-import {PipelineModel} from "./pipeline-model";
+import {PipelineResponse} from "./pipeline-model";
 import TableDay from "./TableDay";
 import AddProspect from "./AddProspect";
 import EditProspect from "./EditProspect";
@@ -19,10 +19,10 @@ const PipelinePage = () => {
     const [showEditProspect, setShowEditProspect] = useState(false);
     const [currentPipelineDate, setCurrentPipelineDate] = useState(new Date());
     const [currentPipelineDateString, setCurrentPipelineDateString] = useState("");
-    const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineModel[]>();
+    const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineResponse[]>();
     const {activeMenu, screenSize} = useStateContext()
 
-    const [editProspect, setEditProspect] = useState({} as PipelineModel);
+    const [editProspect, setEditProspect] = useState({} as PipelineResponse);
 
     useEffect(() => {
         Moment.locale("id");
