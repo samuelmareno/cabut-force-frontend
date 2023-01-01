@@ -52,9 +52,18 @@ const PipelinePage = () => {
 
     return (
         <>
-            {showAddProspect ? <AddProspect onDismissClick={() => setShowAddProspect(false)}/> : null}
+            {showAddProspect ? <AddProspect
+                onDismissClick={() => setShowAddProspect(false)}
+                refetchPipeline={handleGetPipeline}
+            /> : null}
             {showEditProspect ?
-                <EditProspect pipelineModel={editProspect} onCancelClick={() => setShowEditProspect(false)}/> : null}
+                <EditProspect pipelineModel={editProspect}
+                              onCancelClick={() => setShowEditProspect(false)}
+                              refetchPipeline={() => {
+                                  setShowEditProspect(false);
+                                  handleGetPipeline();
+                              }
+                              }/> : null}
             <main>
                 <section className="bg-white p-4">
                     <p className="uppercase text-blue-800">Pipeline</p>
@@ -133,7 +142,9 @@ const PipelinePage = () => {
                                               onEditClick={(editPipeline) => {
                                                   setEditProspect(editPipeline);
                                               }
-                                              }/>}
+                                              }
+                                              refetchPipeline={handleGetPipeline}
+                    />}
                 </section>
             </main>
         </>

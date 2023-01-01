@@ -11,6 +11,7 @@ type TableProps = {
     day: string;
     pipeline: PipelineResponse[];
     onEditClick: (pipelineModel: PipelineResponse) => void;
+    refetchPipeline: () => void;
 };
 
 
@@ -38,17 +39,22 @@ const TableDay = (props: TableProps) => {
     const [jwt] = useLocalStorage('jwt', '');
 
     const handleDelete = (pipelineId: string) => {
-        axiosFetch({
-            axiosInstance: axios(decrypt(jwt)),
-            method: "DELETE",
-            url: `/${pipelineId}`,
-        }).then();
+        let confirmDelete = window.confirm("Anda yakin ingin menghapus data ini?");
+        if (confirmDelete) {
+            axiosFetch({
+                axiosInstance: axios(decrypt(jwt)),
+                method: "DELETE",
+                url: `/${pipelineId}`,
+            }).then();
+        }
     };
 
     useEffect(() => {
         if (webResponse) {
-            window.location.reload();
+            props.refetchPipeline();
         }
+
+        // eslint-disable-next-line
     }, [webResponse]);
 
     useEffect(() => {
@@ -100,7 +106,7 @@ const TableDay = (props: TableProps) => {
                         ${value.status === "FOLLOW_UP" && "text-yellow-400"} 
                         ${value.status === "LOST" && "text-red-500"}`}>{value.status}</td>
                         <td className="p-2">{value.phoneNumber}</td>
-                        <td className={`p-2 ${value.address ? "" : "text-red-600 italic"}`}>{value.address ?? "Belum diisi"}</td>
+                        <td className={`p-2 ${!value.address && "text-red-600 italic"}`}>{!value.address && "Belum diisi"} {value.address}</td>
                         <td className="p-2">{value.productType.name}</td>
                         <td className="p-2">{Moment(value.prospectDate).format("DD MMMM yyyy")}</td>
                         <td className="text-center space-x-3">

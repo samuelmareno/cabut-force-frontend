@@ -9,6 +9,7 @@ import updateLogger from "../../../util/update-logger";
 
 type EditProspectProps = {
     pipelineModel: PipelineResponse;
+    refetchPipeline: () => void;
     onCancelClick: () => void;
 }
 
@@ -25,7 +26,7 @@ const EditProspect = (props: EditProspectProps) => {
     });
     const [jwt] = useLocalStorage('jwt', '');
 
-    const handleProspekItem = (key: string, value: any) => {
+    const handleProspekItem = (key: keyof UpdatePipelineRequest, value: any) => {
         updateLogger(key, value);
         setUpdatePipelineRequest({...updatePipelineRequest, [key]: value});
     }
@@ -44,8 +45,10 @@ const EditProspect = (props: EditProspectProps) => {
     useEffect(() => {
         if (webResponse) {
             updateLogger("success update pipeline", webResponse);
-            window.location.reload();
+            props.refetchPipeline();
         }
+
+        // eslint-disable-next-line
     }, [webResponse]);
 
     useEffect(() => {
@@ -90,13 +93,12 @@ const EditProspect = (props: EditProspectProps) => {
                                 Status:
                                 <select
                                     name="status"
-                                    id="status"
-                                    value={updatePipelineRequest.status}
+                                    defaultValue={updatePipelineRequest.status}
+                                    value={updatePipelineRequest.status.toLowerCase()}
                                     className="w-full rounded-md border-gray-300 border-1"
                                     onChange={(e) =>
                                         handleProspekItem("status", e.currentTarget.value)
                                     }
-                                    defaultValue="baru"
                                 >
                                     <option value="follow_up">Follow Up</option>
                                     <option value="deal">Deal</option>

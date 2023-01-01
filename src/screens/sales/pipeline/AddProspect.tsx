@@ -9,6 +9,7 @@ import useLocalStorage from "../../../hooks/useLocalStorage";
 
 type Props = {
     onDismissClick: () => void;
+    refetchPipeline: () => void;
 }
 
 const AddProspect = (props: Props) => {
@@ -36,7 +37,8 @@ const AddProspect = (props: Props) => {
     useEffect(() => {
         if (webResponse) {
             updateLogger(`success create pipeline, ${webResponse}`);
-            window.location.reload();
+            props.refetchPipeline();
+            props.onDismissClick();
         }
     })
 
