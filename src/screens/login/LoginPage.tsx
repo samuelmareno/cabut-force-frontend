@@ -54,9 +54,8 @@ const LoginPage = () => {
     }, [webResponse]);
 
     return (
-        <section className="bg-gray-50">
-            <div className="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
-                <div className="mb-6 flex flex-row items-center text-2xl font-semibold text-gray-900">
+            <div className="bg-gray-50 mx-auto flex flex-col items-center justify-center px-6 py-8 h-screen lg:py-0 min-h-[320px] overflow-x-auto">
+                <div className="text-center mb-4 flex flex-row items-center text-xl sm:text-2xl font-semibold text-gray-900">
                     <img
                         alt="logo"
                         className="mr-2 h-8 w-8"
@@ -142,7 +141,6 @@ const LoginPage = () => {
                     </div>
                 </div>
             </div>
-        </section>
     );
 };
 

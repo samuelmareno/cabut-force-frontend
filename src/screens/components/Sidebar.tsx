@@ -28,9 +28,8 @@ const Sidebar = () => {
                     <div id="Logo Brand" className="flex items-center justify-between">
                         <Link
                             to="/"
-                            className="items-center gap-3 ml-3
-              mt-4 flex text-xl font-extrabold
-              text-slate-900"
+                            onClick={handleCloseSidebar}
+                            className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold text-slate-900"
                         >
                             <div className="flex items-center text-xl font-semibold text-gray-900">
                                 <img

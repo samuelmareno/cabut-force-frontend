@@ -16,6 +16,7 @@ const EditProspect = (props: EditProspectProps) => {
     const [editablePipelineModel, setEditablePipelineModel] = useState({...props.pipelineModel});
     const [jwt] = useLocalStorage('jwt', '');
     const handleProspekItem = (key: string, value: any) => {
+        console.log(key, value);
         setEditablePipelineModel({...editablePipelineModel, [key]: value});
     }
     const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineModel>();
@@ -32,7 +33,7 @@ const EditProspect = (props: EditProspectProps) => {
                 phoneNumber: editablePipelineModel.phoneNumber,
                 address: editablePipelineModel.address,
                 status: editablePipelineModel.status,
-                productType: editablePipelineModel.productType.id,
+                productType: editablePipelineModel.productType,
                 prospectDate: editablePipelineModel.prospectDate
             }
         }).then();
@@ -159,7 +160,7 @@ const EditProspect = (props: EditProspectProps) => {
                                     value={editablePipelineModel.productType.id}
                                     className="w-full rounded-md border-gray-300 border-1"
                                     onChange={(e) =>
-                                        handleProspekItem("product", e.currentTarget.value)
+                                        handleProspekItem("productType", Number(e.currentTarget.value))
                                     }
                                 >
                                     <option value={1}>PLO Horizontal</option>

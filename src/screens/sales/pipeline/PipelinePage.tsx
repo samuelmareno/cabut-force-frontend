@@ -10,6 +10,7 @@ import {PipelineModel} from "./pipeline-model";
 import TableDay from "./TableDay";
 import AddProspect from "./AddProspect";
 import EditProspect from "./EditProspect";
+import {useStateContext} from "../../../contexts/ContextProvider";
 
 const PipelinePage = () => {
     const [jwt] = useLocalStorage('jwt', '');
@@ -19,11 +20,13 @@ const PipelinePage = () => {
     const [currentPipelineDate, setCurrentPipelineDate] = useState(new Date());
     const [currentPipelineDateString, setCurrentPipelineDateString] = useState("");
     const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineModel[]>();
+    const {activeMenu, screenSize} = useStateContext()
 
     const [editProspect, setEditProspect] = useState({} as PipelineModel);
 
     useEffect(() => {
         Moment.locale("id");
+        setDay(Moment().format("dddd"));
         handleDate(currentPipelineDate);
 
         //eslint-disable-next-line
@@ -77,6 +80,7 @@ const PipelinePage = () => {
                             name="pipeline-day"
                             id="product"
                             className="rounded-md border-gray-300 border-1"
+                            value={day}
                             onChange={(event) => {
                                 event.preventDefault();
                                 setDay(event.currentTarget.value);
@@ -103,7 +107,7 @@ const PipelinePage = () => {
                             value={Moment(currentPipelineDate).format("DD-MM-yyyy")}
                             minDate={handleMinDateToMonday(new Date())}
                             isClearable={false}
-                            className="w-full rounded-lg border-2 border-gray-300 p-2"
+                            className={`w-full rounded-lg border-2 border-gray-300 p-2 ${activeMenu && screenSize < 900 ? "hidden" : ""}`}
                         />
                     </div>
                 </section>

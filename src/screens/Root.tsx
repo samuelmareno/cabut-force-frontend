@@ -10,6 +10,28 @@ export default function Root() {
     const [jwtToken] = useLocalStorage('jwt', '');
     const navigate = useNavigate();
     const location = useLocation();
+    const {setScreenSize, setActiveMenu} = useStateContext();
+
+    useEffect(() => {
+        const handleResize = () => setScreenSize(window.innerWidth);
+
+        window.addEventListener("resize", handleResize);
+        handleResize();
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    });
+
+    useEffect(() => {
+        if (screenSize <= 900) {
+            setActiveMenu(false);
+        } else {
+            setActiveMenu(true);
+        }
+
+        // eslint-disable-next-line
+    }, [screenSize]);
 
     useEffect(() => {
         if (!jwtToken) {
@@ -20,8 +42,11 @@ export default function Root() {
     }, []);
 
     useEffect(() => {
+        // for prevent dashboard screen flickering
         if (location.pathname === "/") {
-            navigate("/dashboard");
+            if (!jwtToken) {
+                navigate("/login");
+            }
         }
     });
 
