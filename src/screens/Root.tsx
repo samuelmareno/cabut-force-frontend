@@ -46,7 +46,9 @@ export default function Root() {
         if (location.pathname === "/") {
             if (!jwtToken) {
                 navigate("/login");
+                return;
             }
+            navigate("/dashboard");
         }
     });
 
