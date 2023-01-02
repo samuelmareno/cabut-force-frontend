@@ -1,6 +1,6 @@
 import {useEffect, useRef} from "react";
 
-export default function useUpdateEffect(callback, dependencies) {
+export default function useUpdateEffect(callback: any, dependencies: any[]) {
       const firstRender = useRef(true);
 
         useEffect(() => {
