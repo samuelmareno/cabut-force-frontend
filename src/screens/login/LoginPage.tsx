@@ -9,12 +9,21 @@ type JwtToken = {
     token: string;
 }
 
+type UiState = {
+    email: string;
+    password: string;
+    errorMessage: string;
+}
+
 const LoginPage = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [uiState, setUiState] = useState<UiState>({email: "", errorMessage: "", password: ""});
     const {webResponse, axiosFetch, loading, error} = useAxiosFunction<JwtToken>();
     const [jwtToken, setJwtToken] = useLocalStorage('jwt', '');
     const navigate = useNavigate()
+
+    const handleEvent = (key: keyof UiState, value: any) => {
+        setUiState({...uiState, [key]: value});
+    }
 
     const login = () => {
         axiosFetch({
@@ -22,8 +31,8 @@ const LoginPage = () => {
             method: "POST",
             url: "/login",
             data: {
-                email: email,
-                password: password
+                email: uiState.email,
+                password: uiState.password
             },
         }).then();
     }
@@ -37,8 +46,10 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (error) {
-            alert(error.response.data.data);
+            handleEvent("errorMessage", error.response.data.data);
         }
+
+        // eslint-disable-next-line
     }, [error]);
 
     useEffect(() => {
@@ -87,8 +98,8 @@ const LoginPage = () => {
                         focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                     id="email"
                                     name="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={uiState.email}
+                                    onChange={(e) => handleEvent("email", e.currentTarget.value)}
                                     placeholder="name@bankjateng.co.id"
                                     required={true}
                                     type="text"
@@ -108,21 +119,30 @@ const LoginPage = () => {
                                     name="password"
                                     placeholder="••••••••"
                                     required={true}
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    value={uiState.password}
+                                    onChange={(e) => handleEvent("password", e.currentTarget.value)}
                                     type="password"
                                 />
+                                <p className="text-red-600 font-medium text-sm text-center mt-2">{uiState.errorMessage}</p>
                             </div>
                             <button
+                                disabled={loading}
                                 className="w-full text-white bg-primary-500 hover:bg-primary-700 focus:ring-4
                     focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                                 id="loginButton"
                                 type="button"
                                 onClick={(event) => {
-                                    if (email === "" || password === "") return;
-                                    if (loading) return;
-                                    login();
                                     event.preventDefault();
+                                    handleEvent("errorMessage", "");
+                                    if (uiState.email === "") {
+                                        handleEvent("errorMessage", "Email tidak boleh kosong");
+                                        return;
+                                    }
+                                    if (uiState.password === "") {
+                                        handleEvent("errorMessage", "Password tidak boleh kosong");
+                                        return;
+                                    }
+                                    login();
                                 }}
                             >
                                 {loading ? (<>
