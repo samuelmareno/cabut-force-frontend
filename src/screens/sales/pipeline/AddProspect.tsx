@@ -2,21 +2,28 @@ import React, {useEffect, useState} from "react";
 
 import updateLogger from "../../../util/update-logger";
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
-import {PipelineResponse} from "./pipeline-model";
+import {CreatePipelineRequest, PipelineResponse} from "./pipeline-model";
 import axios from "../../../apis/pipeline";
 import {decrypt} from "../../../util/crypto";
 import useLocalStorage from "../../../hooks/useLocalStorage";
+import DatePicker from "react-datepicker";
+import Moment from "moment/moment";
 
 type Props = {
     onDismissClick: () => void;
     refetchPipeline: () => void;
+    minDate: Date;
 }
 
 const AddProspect = (props: Props) => {
-    const [currentProspekItem, setCurrentProspekItem] = useState({
+    const [currentProspekItem, setCurrentProspekItem] = useState<CreatePipelineRequest>({
+        address: null,
+        name: "",
+        nip: "",
+        phoneNumber: "",
         status: "follow_up",
         productType: 1,
-        prospectDate: 0
+        prospectDate: new Date().getTime(),
     });
     const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineResponse>();
     const [jwtToken] = useLocalStorage('jwt', '');
@@ -25,6 +32,22 @@ const AddProspect = (props: Props) => {
     };
 
     const handleSubmit = () => {
+        if (currentProspekItem.name === "") {
+            alert("Nama harus diisi");
+            return;
+        }
+        if (currentProspekItem.phoneNumber === "") {
+            alert("Nomor telepon harus diisi");
+            return;
+        }
+        if (currentProspekItem.nip === "") {
+            alert("NIP harus diisi");
+            return;
+        }
+        if (currentProspekItem.prospectDate === 0) {
+            alert("Tanggal Follow Up harus diisi");
+            return;
+        }
         updateLogger(currentProspekItem);
         axiosFetch({
             axiosInstance: axios(decrypt(jwtToken)),
@@ -71,6 +94,7 @@ const AddProspect = (props: Props) => {
                                     type="text"
                                     name="name"
                                     required={true}
+                                    value={currentProspekItem.name}
                                     onChange={(e) =>
                                         handleProspekItem("name", e.currentTarget.value)
                                     }
@@ -84,10 +108,10 @@ const AddProspect = (props: Props) => {
                                     name="status"
                                     id="status"
                                     className="w-full rounded-md border-gray-300 border-1"
+                                    value={currentProspekItem.status}
                                     onChange={(e) =>
                                         handleProspekItem("status", e.currentTarget.value)
                                     }
-                                    defaultValue="follow_up"
                                 >
                                     <option value="follow_up">Follow Up</option>
                                     <option value="deal">Deal</option>
@@ -96,22 +120,26 @@ const AddProspect = (props: Props) => {
                             </label>
                             <label>
                                 Rencana Follow-up:
-                                <input
-                                    type="date"
-                                    onChange={(e) =>
+                                <DatePicker
+                                    minDate={props.minDate} // TODO: check correct min date
+                                    onChange={(date, event) => {
+                                        event?.preventDefault();
                                         handleProspekItem(
                                             "prospectDate",
-                                            e.currentTarget.valueAsNumber
+                                            date?.getTime() || new Date().getTime()
                                         )
                                     }
+                                    }
+                                    value={Moment(currentProspekItem.prospectDate).format("DD/MM/yyyy")}
                                     className="mt-2 block w-full rounded-md border-gray-300 shadow-sm
                                  focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 />
                             </label>
                             <label>
-                                Alamat *:
+                                Alamat :
                                 <input
                                     type="text"
+                                    value={currentProspekItem.address ?? undefined}
                                     className="mt-2 block w-full rounded-md border-gray-300 shadow-sm
                                  focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     onChange={(e) =>
@@ -123,6 +151,7 @@ const AddProspect = (props: Props) => {
                                 No. Telp *:
                                 <input
                                     type="text"
+                                    value={currentProspekItem.phoneNumber}
                                     className="mt-2 block w-full rounded-md border-gray-300 shadow-sm
                                  focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     onChange={(e) =>
@@ -134,6 +163,7 @@ const AddProspect = (props: Props) => {
                                 NIP *:
                                 <input
                                     type="text"
+                                    value={currentProspekItem.nip}
                                     className="mt-2 block w-full rounded-md border-gray-300 shadow-sm
                                     focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                     onChange={(e) =>
@@ -146,6 +176,7 @@ const AddProspect = (props: Props) => {
                                 <select
                                     name="product"
                                     id="product"
+                                    value={currentProspekItem.productType}
                                     className="w-full rounded-md border-gray-300 border-1"
                                     onChange={(e) => handleProspekItem("productType", Number(e.currentTarget.value))
                                     }

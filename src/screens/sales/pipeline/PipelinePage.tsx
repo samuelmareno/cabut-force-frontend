@@ -54,6 +54,7 @@ const PipelinePage = () => {
         <>
             {showAddProspect ? <AddProspect
                 onDismissClick={() => setShowAddProspect(false)}
+                minDate={handleMinDateToMonday(new Date())}
                 refetchPipeline={handleGetPipeline}
             /> : null}
             {showEditProspect ?

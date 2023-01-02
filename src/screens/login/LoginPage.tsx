@@ -37,7 +37,7 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (error) {
-            alert(error);
+            alert(error.response.data.data);
         }
     }, [error]);
 

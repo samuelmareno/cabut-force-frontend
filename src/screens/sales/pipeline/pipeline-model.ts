@@ -10,6 +10,16 @@ export type PipelineResponse = {
     referralUser: string;
 }
 
+export type CreatePipelineRequest = {
+    nip: string;
+    name: string;
+    phoneNumber: string;
+    address: string | null;
+    status: string;
+    productType: number;
+    prospectDate: number;
+}
+
 export type UpdatePipelineRequest = {
     id: string;
     nip: string;
