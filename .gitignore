@@ -1,3 +1,5 @@
 .idea
 node_modules
 *.http
+Build Webhook AWS Amplify.http
+.env

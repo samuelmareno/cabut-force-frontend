@@ -117,7 +117,8 @@ const PipelinePage = () => {
                             value={Moment(currentPipelineDate).format("DD-MM-yyyy")}
                             minDate={handleMinDateToMonday(new Date())}
                             isClearable={false}
-                            className={`w-full rounded-lg border-2 border-gray-300 p-2 ${activeMenu && screenSize < 900 ? "hidden" : ""}`}
+                            className={`w-full rounded-lg border-2 border-gray-300 p-2 
+                            ${activeMenu && screenSize < 900 ? "hidden" : ""}`}
                         />
                     </div>
                 </section>

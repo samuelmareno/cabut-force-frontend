@@ -17,7 +17,7 @@ type Props = {
 
 const AddProspect = (props: Props) => {
     const [currentProspekItem, setCurrentProspekItem] = useState<CreatePipelineRequest>({
-        address: null,
+        address: "",
         name: "",
         nip: "",
         phoneNumber: "",
@@ -121,7 +121,7 @@ const AddProspect = (props: Props) => {
                             <label>
                                 Rencana Follow-up:
                                 <DatePicker
-                                    minDate={props.minDate} // TODO: check correct min date
+                                    minDate={props.minDate}
                                     onChange={(date, event) => {
                                         event?.preventDefault();
                                         handleProspekItem(
@@ -172,7 +172,7 @@ const AddProspect = (props: Props) => {
                                 />
                             </label>
                             <label>
-                                Produk *:
+                                Produk:
                                 <select
                                     name="product"
                                     id="product"
