@@ -9,7 +9,7 @@ type UserState = {
     isLoggedIn: boolean;
     id: string;
     name: string;
-    email: string;
+    username: string;
     role: string;
     lastLogin: number | null;
     createdAt: number;
@@ -23,9 +23,8 @@ const useUserState = () => {
 
     useEffect(() => {
             try {
-                const token = decrypt(jwt);
                 axiosFetch({
-                    axiosInstance: users(token),
+                    axiosInstance: users(decrypt(jwt)),
                     method: "GET",
                     url: "/",
                 }).then()

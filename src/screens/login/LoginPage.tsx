@@ -10,42 +10,39 @@ type JwtToken = {
 }
 
 type UiState = {
-    email: string;
+    username: string;
     password: string;
     errorMessage: string;
 }
 
 const LoginPage = () => {
-    const [uiState, setUiState] = useState<UiState>({email: "", errorMessage: "", password: ""});
+    const [uiState, setUiState] = useState<UiState>({username: "", errorMessage: "", password: ""});
     const {webResponse, axiosFetch, loading, error} = useAxiosFunction<JwtToken>();
     const [jwtToken, setJwtToken] = useLocalStorage('jwt', '');
     const navigate = useNavigate()
 
-    const handleEvent = (key: keyof UiState, value: any) => {
+    function handleEvent(key: keyof UiState, value: any) {
         setUiState({...uiState, [key]: value});
     }
 
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    function handleLogin(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         handleEvent("errorMessage", "");
-        if (uiState.email === "") {
-            handleEvent("errorMessage", "Email tidak boleh kosong");
+        if (uiState.username === "") {
+            handleEvent("errorMessage", "Username tidak boleh kosong");
             return;
         }
         if (uiState.password === "") {
             handleEvent("errorMessage", "Password tidak boleh kosong");
             return;
         }
-        login();
-    }
 
-    const login = () => {
         axiosFetch({
             axiosInstance: auth,
             method: "POST",
             url: "/login",
             data: {
-                email: uiState.email,
+                username: uiState.username,
                 password: uiState.password
             },
         }).then();
@@ -83,11 +80,6 @@ const LoginPage = () => {
             className="bg-gray-50 mx-auto flex flex-col items-center justify-center px-6 py-8 h-screen lg:py-0 min-h-[320px] overflow-x-auto">
             <div
                 className="text-center mb-4 flex flex-row items-center text-xl sm:text-2xl font-semibold text-gray-900">
-                <img
-                    alt="logo"
-                    className="mr-2 h-8 w-8"
-                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                />
                 <h2 className="font-bold">CABUT
                     FORCE {process.env.NODE_ENV === "development" && process.env.NODE_ENV}</h2>
             </div>
@@ -102,22 +94,22 @@ const LoginPage = () => {
                             src="https://upload.wikimedia.org/wikipedia/id/c/c4/Bank_Jateng_logo.svg"
                         />
                     </div>
-                    <form onSubmit={(event) => handleLogin(event)} className="space-y-4 md:space-y-6">
+                    <form onSubmit={handleLogin} className="space-y-4 md:space-y-6">
                         <div>
                             <label
                                 className="mb-2 block text-sm font-medium text-gray-900"
-                                htmlFor="email"
+                                htmlFor="username"
                             >
-                                Your email
+                                Username
                             </label>
                             <input
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg
                         focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                id="email"
-                                name="email"
-                                value={uiState.email}
-                                onChange={(e) => handleEvent("email", e.currentTarget.value)}
-                                placeholder="name@bankjateng.co.id"
+                                id="username"
+                                name="username"
+                                value={uiState.username}
+                                onChange={(e) => handleEvent("username", e.currentTarget.value)}
+                                placeholder="username"
                                 type="text"
                             />
                         </div>
