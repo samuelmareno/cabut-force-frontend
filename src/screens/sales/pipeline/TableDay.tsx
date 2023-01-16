@@ -25,6 +25,7 @@ const TableDay = (props: TableProps) => {
             id: pipelineModel.id,
             nip: pipelineModel.nip,
             name: pipelineModel.name,
+            nik: pipelineModel.nik,
             phoneNumber: pipelineModel.phoneNumber,
             address: pipelineModel.address,
             status: pipelineModel.status,
@@ -32,6 +33,7 @@ const TableDay = (props: TableProps) => {
             prospectDate: pipelineModel.prospectDate,
             day: day,
             referralUser: pipelineModel.referralUser,
+            nominal: pipelineModel.nominal,
         }
     });
 
@@ -73,6 +75,9 @@ const TableDay = (props: TableProps) => {
                         NIP
                     </th>
                     <th className={classNameTableHead}>
+                        NIK
+                    </th>
+                    <th className={classNameTableHead}>
                         Nama
                     </th>
                     <th className={classNameTableHead}>
@@ -90,6 +95,9 @@ const TableDay = (props: TableProps) => {
                     <th className={classNameTableHead}>
                         Tanggal Prospek
                     </th>
+                    <th className={classNameTableHead}>
+                        Nominal
+                    </th>
                     <th className="p-5 text-center text-sm font-semibold tracking-wide">
                         Action
                     </th>
@@ -100,6 +108,7 @@ const TableDay = (props: TableProps) => {
                     <tr key={value.id}
                         className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
                         <td className="p-2">{value.nip}</td>
+                        <td className="p-2">{value.nik}</td>
                         <td className="p-2">{value.name}</td>
                         <td className={`p-2 text-lg font-semibold
                         ${value.status === "DEAL" && "text-green-500"} 
@@ -109,6 +118,7 @@ const TableDay = (props: TableProps) => {
                         <td className={`p-2 ${!value.address && "text-red-600 italic"}`}>{!value.address && "Belum diisi"} {value.address}</td>
                         <td className="p-2">{value.productType.name}</td>
                         <td className="p-2">{Moment(value.prospectDate).format("DD MMMM yyyy")}</td>
+                        <td className="p-2">{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value.nominal)}</td>
                         <td className="text-center space-x-3">
                             <button
                                 disabled={loading}

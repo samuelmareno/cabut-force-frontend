@@ -110,6 +110,7 @@ const LoginPage = () => {
                                 value={uiState.username}
                                 onChange={(e) => handleEvent("username", e.currentTarget.value)}
                                 placeholder="username"
+                                autoComplete={"username"}
                                 type="text"
                             />
                         </div>
@@ -127,6 +128,7 @@ const LoginPage = () => {
                                 name="password"
                                 placeholder="••••••••"
                                 onChange={(e) => handleEvent("password", e.currentTarget.value)}
+                                autoComplete={"current-password"}
                                 type="password"
                             />
                             <p className="text-red-600 font-medium text-sm text-center mt-2">{uiState.errorMessage}</p>

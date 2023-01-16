@@ -25,18 +25,13 @@ const Sidebar = () => {
         >
             {activeMenu && (
                 <>
-                    <div id="Logo Brand" className="flex items-center justify-between">
+                    <div id="Logo Brand" className="flex items-center justify-between mt-2">
                         <Link
                             to="/"
                             onClick={handleCloseSidebar}
-                            className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold text-slate-900"
+                            className="items-center gap-3 ml-4 mt-4 flex text-xl font-extrabold text-slate-900"
                         >
                             <div className="flex items-center text-xl font-semibold text-gray-900">
-                                <img
-                                    alt="logo"
-                                    className="mr-2 h-8 w-8"
-                                    src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                                />
                                 <span>Cabut Force</span>
                             </div>
                         </Link>

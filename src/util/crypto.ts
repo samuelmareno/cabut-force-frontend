@@ -1,8 +1,8 @@
 import CryptoJS from "crypto-js";
 
-const key = 'c4butf0rc3';
+const key = process.env.REACT_APP_CRYPTO_KEY as string;
 
-export const encrypt = (plaintext: string | any): string => {
+export function encrypt(plaintext: string | any): string {
     if (typeof plaintext === 'object') {
         return CryptoJS.AES.encrypt(JSON.stringify(plaintext), key).toString();
     }
@@ -10,9 +10,9 @@ export const encrypt = (plaintext: string | any): string => {
         return CryptoJS.AES.encrypt(plaintext, key).toString();
     }
     return '';
-};
+}
 
-export const decrypt = (ciphertext: string | any) => {
+export function decrypt(ciphertext: string | any) {
     const bytes = CryptoJS.AES.decrypt(ciphertext, key);
     if (typeof ciphertext === 'object') {
         return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
@@ -22,4 +22,4 @@ export const decrypt = (ciphertext: string | any) => {
         return bytes.toString(CryptoJS.enc.Utf8);
     }
     return bytes.toString(CryptoJS.enc.Utf8);
-};
+}
