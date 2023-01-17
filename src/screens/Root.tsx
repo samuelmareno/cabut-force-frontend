@@ -6,32 +6,35 @@ import {useEffect} from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Root() {
-    const {activeMenu, screenSize} = useStateContext();
+    const {activeMenu, screenWidthSize} = useStateContext();
     const [jwtToken] = useLocalStorage('jwt', '');
     const navigate = useNavigate();
     const location = useLocation();
-    const {setScreenSize, setActiveMenu} = useStateContext();
+    const {setScreenWidthSize, setScreenHeightSize, setActiveMenu} = useStateContext();
 
     useEffect(() => {
-        const handleResize = () => setScreenSize(window.innerWidth);
+        const handleResize = () => {
+            setScreenWidthSize(window.innerWidth);
+            setScreenHeightSize(window.innerHeight);
+        }
 
         window.addEventListener("resize", handleResize);
         handleResize();
 
         return () => {
-            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", handleResize, false);
         };
     });
 
     useEffect(() => {
-        if (screenSize <= 900) {
+        if (screenWidthSize <= 900) {
             setActiveMenu(false);
         } else {
             setActiveMenu(true);
         }
 
         // eslint-disable-next-line
-    }, [screenSize]);
+    }, [screenWidthSize]);
 
     useEffect(() => {
         // for prevent bug when user refresh
@@ -51,7 +54,7 @@ export default function Root() {
                 <div className="flex">
                     <div
                         className={`${
-                            activeMenu && screenSize < 900 ? "block" : "hidden"
+                            activeMenu && screenWidthSize < 900 ? "block" : "hidden"
                         } w-screen h-screen bg-black absolute opacity-50`}
                     />
                     <div>

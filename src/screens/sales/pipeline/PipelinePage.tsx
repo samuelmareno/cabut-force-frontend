@@ -20,7 +20,7 @@ const PipelinePage = () => {
     const [currentPipelineDate, setCurrentPipelineDate] = useState(new Date());
     const [currentPipelineDateString, setCurrentPipelineDateString] = useState("");
     const {webResponse, axiosFetch, error, loading} = useAxiosFunction<PipelineResponse[]>();
-    const {activeMenu, screenSize} = useStateContext()
+    const {activeMenu, screenWidthSize, screenHeightSize} = useStateContext()
 
     const [editProspect, setEditProspect] = useState({} as PipelineResponse);
 
@@ -56,15 +56,19 @@ const PipelinePage = () => {
                 onDismissClick={() => setShowAddProspect(false)}
                 minDate={handleMinDateToMonday(new Date())}
                 refetchPipeline={handleGetPipeline}
+                screenHeightSize={screenHeightSize}
             /> : null}
             {showEditProspect ?
                 <EditProspect pipelineModel={editProspect}
                               onCancelClick={() => setShowEditProspect(false)}
-                              refetchPipeline={() => {
-                                  setShowEditProspect(false);
-                                  handleGetPipeline();
+                              refetchPipeline={
+                                  () => {
+                                      setShowEditProspect(false);
+                                      handleGetPipeline();
+                                  }
                               }
-                              }/> : null}
+                              screenHeightSize={screenHeightSize}
+                /> : null}
             <main>
                 <section className="bg-white p-4">
                     <p className="uppercase text-blue-800">Pipeline</p>
@@ -118,7 +122,7 @@ const PipelinePage = () => {
                             minDate={handleMinDateToMonday(new Date())}
                             isClearable={false}
                             className={`w-full rounded-lg border-2 border-gray-300 p-2 
-                            ${activeMenu && screenSize < 900 ? "hidden" : ""}`}
+                            ${activeMenu && screenWidthSize < 900 ? "hidden" : ""}`}
                         />
                     </div>
                 </section>

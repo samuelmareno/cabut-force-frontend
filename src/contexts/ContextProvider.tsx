@@ -6,21 +6,26 @@ type StateContextProviderProps = {
     children?: React.ReactNode,
     activeMenu: boolean,
     setActiveMenu: React.Dispatch<React.SetStateAction<boolean>>,
-    screenSize: any,
-    setScreenSize: React.Dispatch<React.SetStateAction<any>>,
+    screenWidthSize: number,
+    setScreenWidthSize: React.Dispatch<React.SetStateAction<number>>,
+    screenHeightSize: number,
+    setScreenHeightSize: React.Dispatch<React.SetStateAction<number>>,
 }
 
 export const StateContextProvider = ({children}: StateContextProviderProps) => {
     const [activeMenu, setActiveMenu] = useState(true);
-    const [screenSize, setScreenSize] = useState(undefined);
+    const [screenWidthSize, setScreenWidthSize] = useState(0);
+    const [screenHeightSize, setScreenHeightSize] = useState(0);
 
     return (
         <StateContext.Provider
             value={{
                 activeMenu,
                 setActiveMenu,
-                screenSize,
-                setScreenSize,
+                screenWidthSize: screenWidthSize,
+                setScreenWidthSize: setScreenWidthSize,
+                screenHeightSize: screenHeightSize,
+                setScreenHeightSize: setScreenHeightSize,
             }}
         >
             {children}

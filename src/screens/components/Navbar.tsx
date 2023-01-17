@@ -52,12 +52,12 @@ const ProfileCard = (props: ProfileCardProps) => {
 };
 
 const Navbar = () => {
-    const {activeMenu, setActiveMenu, screenSize} = useStateContext();
+    const {activeMenu, setActiveMenu, screenWidthSize} = useStateContext();
     const [showProfileCard, setShowProfileCard] = useState(false);
    const userState = useUserState();
 
     useEffect(() => {
-        if (showProfileCard && screenSize <= 900 && activeMenu) {
+        if (showProfileCard && screenWidthSize <= 900 && activeMenu) {
             setShowProfileCard(false);
         }
 
@@ -73,7 +73,7 @@ const Navbar = () => {
 
             <div
                 className={`${
-                    activeMenu && screenSize <= 900 ? "static" : "relative"
+                    activeMenu && screenWidthSize <= 900 ? "static" : "relative"
                 } items-center `}
             >
                 <div

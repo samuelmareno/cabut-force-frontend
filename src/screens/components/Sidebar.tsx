@@ -5,9 +5,9 @@ import {Link, NavLink, useNavigate} from "react-router-dom";
 import {useStateContext} from "../../contexts/ContextProvider";
 
 const Sidebar = () => {
-    const {activeMenu, setActiveMenu, screenSize} = useStateContext();
+    const {activeMenu, setActiveMenu, screenWidthSize} = useStateContext();
     const handleCloseSidebar = () => {
-        if (activeMenu && screenSize <= 900) {
+        if (activeMenu && screenWidthSize <= 900) {
             setActiveMenu(false);
         }
     };
