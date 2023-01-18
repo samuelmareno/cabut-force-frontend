@@ -5,6 +5,7 @@ import axios from "../../../apis/pipeline";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import {decrypt} from "../../../util/crypto";
 import {useEffect} from "react";
+import ConvertToIDRFormat from "../../../util/ConvertToIDRFormat";
 
 
 type TableProps = {
@@ -118,7 +119,7 @@ const TableDay = (props: TableProps) => {
                         <td className={`p-2 ${!value.address && "text-red-600 italic"}`}>{!value.address && "Belum diisi"} {value.address}</td>
                         <td className="p-2">{value.productType.name}</td>
                         <td className="p-2">{Moment(value.prospectDate).format("DD MMMM yyyy")}</td>
-                        <td className="p-2">{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value.nominal)}</td>
+                        <td className="p-2">{ConvertToIDRFormat(value.nominal)}</td>
                         <td className="text-center space-x-3">
                             <button
                                 disabled={loading}
