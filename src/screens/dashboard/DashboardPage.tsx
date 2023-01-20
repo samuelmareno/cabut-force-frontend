@@ -79,7 +79,7 @@ export default function DashboardPage() {
 
     return (
         <>
-            <div className="">
+            <div className="overflow-x-auto">
                 <div className="">
                     <Bar
                         datasetIdKey={'deal_count'}
