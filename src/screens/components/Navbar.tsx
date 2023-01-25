@@ -64,7 +64,7 @@ const Navbar = () => {
         // eslint-disable-next-line
     }, [activeMenu]);
     return (
-        <nav className="static flex justify-between p-2 md:mx-2">
+        <nav className="flex justify-between items-center sticky p-2 md:mx-2">
             <NavButton
                 icon={"menu"}
                 color="blue"
@@ -72,9 +72,7 @@ const Navbar = () => {
             />
 
             <div
-                className={`${
-                    activeMenu && screenWidthSize <= 900 ? "static" : "relative"
-                } items-center `}
+                className={`relative items-center`}
             >
                 <div
                     className="flex items-center gap-2 rounded-lg p-2 hover:bg-light-gray cursor-pointer"

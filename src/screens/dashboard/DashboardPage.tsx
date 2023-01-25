@@ -3,6 +3,7 @@ import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearS
 import zoomPlugin from 'chartjs-plugin-zoom';
 import {Bar, Pie} from 'react-chartjs-2'
 import generateData from "./data-dummy";
+import {useStateContext} from "../../contexts/ContextProvider";
 
 ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, zoomPlugin);
 
@@ -20,6 +21,7 @@ type NominalDatasetType = {
 }
 
 export default function DashboardPage() {
+    const {screenWidthSize} = useStateContext();
     const pipelineData = generateData();
     const labels = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -79,30 +81,53 @@ export default function DashboardPage() {
 
     return (
         <>
-            <div className="overflow-x-auto">
-                <div className="">
+            <div className="flex flex-col">
+                <p>2023</p>
+                <div className="overflow-x-auto">
                     <Bar
                         datasetIdKey={'deal_count'}
+                        width={2500}
+                        height={`${screenWidthSize <= 900 ? 400 : 720}`}
                         options={
                             {
-                                responsive: true,
+                                responsive: false,
+                                animation: {
+                                    duration: 0
+                                }
                             }
                         }
                         data={chartData}
                     />
                 </div>
                 <p>Januari</p>
-                <Pie
-                    datasetIdKey={'nominal_count'}
-                    width={640}
-                    height={640}
-                    data={pieChartData}
-                    options={
-                        {
-                            responsive: false,
+                <div className="self-center overflow-x-auto">
+                    {screenWidthSize > 900 ? <Pie
+                        datasetIdKey={'nominal_count'}
+                        data={pieChartData}
+                        width={640}
+                        height={640}
+                        options={
+                            {
+                                responsive: false,
+                                animation: {
+                                    duration: 0
+                                }
+                            }
                         }
-                    }
-                />
+                    /> : <Pie
+                        datasetIdKey={'nominal_count2'}
+                        data={pieChartData}
+                        options={
+                            {
+                                responsive: true,
+                                animation: {
+                                    duration: 0
+                                }
+                            }
+                        }
+                    />}
+
+                </div>
             </div>
         </>
     );

@@ -6,7 +6,7 @@ import {useEffect} from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 export default function Root() {
-    const {activeMenu, screenWidthSize} = useStateContext();
+    const {screenWidthSize} = useStateContext();
     const [jwtToken] = useLocalStorage('jwt', '');
     const navigate = useNavigate();
     const location = useLocation();
@@ -51,25 +51,14 @@ export default function Root() {
         // for prevent dashboard screen flickering
         <>
             {jwtToken ?
-                <div className="flex">
-                    <div
-                        className={`${
-                            activeMenu && screenWidthSize < 900 ? "block" : "hidden"
-                        } w-screen h-screen bg-black absolute opacity-50`}
-                    />
+                <div className="flex w-screen h-screen overflow-hidden">
                     <div>
                         <Sidebar/>
                     </div>
-                    <div
-                        className={`min-h-screen w-full bg-main-bg ${
-                            activeMenu ? "md:ml-72" : "flex-2"
-                        }`}
+                    <div className={`bg-main-bg flex flex-col overflow-hidden w-screen`}
                     >
-                        <div className="w-full">
                             <Navbar/>
-                        </div>
-
-                        <div className="p-4">
+                        <div className="p-4 overflow-y-auto overflow-x-hidden">
                             <Outlet/>
                         </div>
                     </div>
