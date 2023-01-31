@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {PipelineResponse, UpdatePipelineRequest} from "./pipeline-model";
 import Moment from "moment";
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
-import {decrypt} from "../../../util/crypto";
 import axios from "../../../apis/pipeline";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import updateLogger from "../../../util/update-logger";
@@ -43,7 +42,7 @@ const EditProspect = (props: EditProspectProps) => {
 
     const handleSubmit = () => {
         axiosFetch({
-            axiosInstance: axios(decrypt(jwt)),
+            axiosInstance: axios(jwt),
             method: "PUT",
             url: `/`,
             data: updatePipelineRequest

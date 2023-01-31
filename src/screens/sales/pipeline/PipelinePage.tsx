@@ -5,7 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "../../../apis/pipeline"
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
 import useLocalStorage from "../../../hooks/useLocalStorage";
-import {decrypt} from "../../../util/crypto";
 import {PipelineResponse} from "./pipeline-model";
 import TableDay from "./TableDay";
 import AddProspect from "./AddProspect";
@@ -178,7 +177,7 @@ const PipelinePage = () => {
         const startDate = currentPipelineDate.getTime();
         const endDate = startDate + 518400000; // milliseconds in 6 days
         axiosFetch({
-            axiosInstance: axios(decrypt(jwt)),
+            axiosInstance: axios(jwt),
             method: "GET",
             url: `/${startDate}/${endDate}`,
         }).then()

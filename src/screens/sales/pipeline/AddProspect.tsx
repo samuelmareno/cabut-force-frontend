@@ -4,7 +4,6 @@ import updateLogger from "../../../util/update-logger";
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
 import {CreatePipelineRequest, PipelineResponse} from "./pipeline-model";
 import axios from "../../../apis/pipeline";
-import {decrypt} from "../../../util/crypto";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import DatePicker from "react-datepicker";
 import Moment from "moment/moment";
@@ -62,7 +61,7 @@ const AddProspect = (props: Props) => {
         }
         updateLogger(currentProspekItem);
         axiosFetch({
-            axiosInstance: axios(decrypt(jwtToken)),
+            axiosInstance: axios(jwtToken),
             method: "POST",
             url: "/",
             data: currentProspekItem,

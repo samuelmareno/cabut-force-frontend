@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import useAxiosFunction from "./useAxiosFunction";
 import users from "../apis/users";
 import useLocalStorage from "./useLocalStorage";
-import {decrypt} from "../util/crypto";
 import {useNavigate} from "react-router-dom";
 
 type UserState = {
@@ -24,7 +23,7 @@ const useUserState = () => {
     useEffect(() => {
             try {
                 axiosFetch({
-                    axiosInstance: users(decrypt(jwt)),
+                    axiosInstance: users(jwt),
                     method: "GET",
                     url: "/",
                 }).then()

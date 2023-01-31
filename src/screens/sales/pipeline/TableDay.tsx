@@ -3,7 +3,6 @@ import Moment from "moment";
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
 import axios from "../../../apis/pipeline";
 import useLocalStorage from "../../../hooks/useLocalStorage";
-import {decrypt} from "../../../util/crypto";
 import {useEffect} from "react";
 import ConvertToIDRFormat from "../../../util/ConvertToIDRFormat";
 
@@ -45,7 +44,7 @@ const TableDay = (props: TableProps) => {
         let confirmDelete = window.confirm("Anda yakin ingin menghapus data ini?");
         if (confirmDelete) {
             axiosFetch({
-                axiosInstance: axios(decrypt(jwt)),
+                axiosInstance: axios(jwt),
                 method: "DELETE",
                 url: `/${pipelineId}`,
             }).then();

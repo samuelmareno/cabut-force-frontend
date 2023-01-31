@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import useAxiosFunction from "../../../hooks/useAxiosFunction";
 import axios from "../../../apis/users";
-import {decrypt} from "../../../util/crypto";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 
 type UIState = {
@@ -73,7 +72,7 @@ const ChangePassword = () => {
         if (!hasError) {
             axiosFetch(
                 {
-                    axiosInstance: axios(decrypt(jwtToken)),
+                    axiosInstance: axios(jwtToken),
                     method: 'PUT',
                     url: '/change-password',
                     data: {
@@ -81,7 +80,7 @@ const ChangePassword = () => {
                         newPassword: uiState.newPassword
                     }
                 }
-            )
+            ).then();
         }
     }
 

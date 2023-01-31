@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import useAxiosFunction from "../../hooks/useAxiosFunction";
 import auth from "../../apis/auth";
-import {encrypt} from "../../util/crypto";
 import useLocalStorage from "../../hooks/useLocalStorage";
 
 type JwtToken = {
@@ -68,7 +67,6 @@ const LoginPage = () => {
             const objectWebResponse: JwtToken = webResponse.data;
             let token = objectWebResponse.token;
             if (token) {
-                token = encrypt(token);
                 setJwtToken(token);
             }
         }
