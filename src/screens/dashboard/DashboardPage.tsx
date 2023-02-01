@@ -1,11 +1,14 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Tooltip} from "chart.js";
-import zoomPlugin from 'chartjs-plugin-zoom';
 import {Bar, Pie} from 'react-chartjs-2'
-import generateData from "./data-dummy";
 import {useStateContext} from "../../contexts/ContextProvider";
+import DatePicker from "react-datepicker";
+import updateLogger from "../../util/update-logger";
+import axios from "../../apis/pipeline";
+import useAxiosFunction from "../../hooks/useAxiosFunction";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
-ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale, zoomPlugin);
+ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 type DealDatasetType = {
     label: string;
@@ -13,54 +16,62 @@ type DealDatasetType = {
     backgroundColor: string;
 }
 
-type NominalDatasetType = {
+type DealDatasetPieType = {
     label: string;
     data: number[];
-    backgroundColor: string;
-    hoverOffset: number;
+    backgroundColor: string[];
+}
+
+type PipelineData = {
+    month: number,
+    productType: string,
+    deal: number,
+    nominal: number
+}
+
+type pieChartDataType = {
+    labels: string[];
+    datasets: DealDatasetPieType[];
 }
 
 export default function DashboardPage() {
     const {screenWidthSize} = useStateContext();
-    const pipelineData = generateData();
+    const [jwt] = useLocalStorage('jwt', '');
     const labels = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
     const dealDatasets: DealDatasetType[] = []
-    const nominalDatasets: NominalDatasetType[] = []
-    const productTypes = [...new Set(pipelineData.map(data => data.productType))];
-    const backgroundColors: string[] = shuffle(randomColor({count: productTypes.length}));
+    const backgroundColors: string[] = ['#10ae5e', '#fe3701', '#cb29bb', '#d1ca2a', '#ec7828', '#24a5de'];
+    const [currentYear, setCurrentYear] = useState(new Date());
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [currentPipelineData, setCurrentPipelineData] = useState([] as PipelineData[]);
+    const [currentProductTypes, setCurrentProductTypes] = useState([] as string[]);
+    const {webResponse, axiosFetch} = useAxiosFunction<PipelineData[]>();
 
-    for (let productType = 0; productType < productTypes.length; productType++) {
-        let dealData = pipelineData
-            .filter((data) => data.productType === productTypes[productType])
-            .sort((a, b) => {
-                if (a.month < b.month) return -1;
-                if (a.month > b.month) return 1;
-                return 0;
-            })
-            .map((data) => data.deal);
+    if (currentProductTypes.length > 0) {
+        for (let productType = 0; productType < currentProductTypes.length; productType++) {
+            let dealData = currentPipelineData
+                .filter((data) => data.productType === currentProductTypes[productType])
+                .sort((a, b) => {
+                    if (a.month < b.month) return -1;
+                    if (a.month > b.month) return 1;
+                    return 0;
+                })
+                .map((data) => data.deal);
 
-        dealDatasets.push({
-            label: productTypes[productType],
-            data: dealData,
-            backgroundColor: backgroundColors[productType]
-        });
-
-        let nominalData = pipelineData
-            .filter((data) => data.productType === productTypes[productType])
-            .sort((a, b) => {
-                if (a.month < b.month) return -1;
-                if (a.month > b.month) return 1;
-                return 0;
-            })
-            .map((data) => data.nominal);
-
-        nominalDatasets.push({
-            label: productTypes[productType],
-            data: nominalData,
-            backgroundColor: backgroundColors[productType],
-            hoverOffset: 4,
-        });
+            dealDatasets.push({
+                label: currentProductTypes[productType],
+                data: dealData,
+                backgroundColor: backgroundColors[productType]
+            });
+            currentPipelineData
+                .filter((data) => data.productType === currentProductTypes[productType])
+                .sort((a, b) => {
+                    if (a.month < b.month) return -1;
+                    if (a.month > b.month) return 1;
+                    return 0;
+                })
+                .map((data) => data.nominal);
+        }
     }
 
     const chartData = {
@@ -68,21 +79,76 @@ export default function DashboardPage() {
         datasets: dealDatasets
     };
 
-    const pieChartData = {
-        labels: productTypes,
+    const pieChartData: pieChartDataType = {
+        labels: currentProductTypes,
         datasets: [
             {
                 label: 'Jumlah Nominal',
-                data: pipelineData.filter((data) => data.month === 1).map((data) => data.nominal),
+                data: currentPipelineData.filter((data) => data.month === currentMonth.getMonth() + 1).map((data) => data.nominal),
                 backgroundColor: backgroundColors,
             }
         ]
     };
 
+    function handleDateChange(date: Date | null) {
+        if (date) {
+            setCurrentYear(date);
+        }
+    }
+
+    function handleMonthChange(month: Date | null) {
+        if (month) {
+            month.setHours(0, 0, 0, 0);
+            setCurrentMonth(month);
+        }
+    }
+
+    function fetchPipelineData(startDate: number, endDate: number) {
+        axiosFetch({
+            axiosInstance: axios(jwt),
+            method: 'GET',
+            url: `graphics/${startDate}/${endDate}`
+        }).then();
+    }
+
+    useEffect(() => {
+        currentYear.setMonth(0);
+        currentYear.setHours(0, 0, 0, 0);
+        const endYear = new Date();
+        endYear.setFullYear(currentYear.getFullYear() + 1, 0);
+        endYear.setHours(0, 0, 0, 0);
+        const startYearInMillis = currentYear.getTime();
+        const endYearInMillis = endYear.getTime() - 1;
+
+        fetchPipelineData(startYearInMillis, endYearInMillis);
+
+        // eslint-disable-next-line
+    }, [currentYear]);
+
+    useEffect(() => {
+        if (webResponse) {
+            updateLogger('DashboardPage', webResponse.data);
+            setCurrentPipelineData(webResponse.data);
+            setCurrentProductTypes([...new Set(webResponse.data.map(data => data.productType))]);
+        }
+
+    }, [webResponse]);
+
+
     return (
         <>
-            <div className="flex flex-col">
-                <p>2023</p>
+            <div className="flex flex-col space-y-4">
+                <div className="flex items-center self-center">
+                    <DatePicker
+                        showYearPicker={true}
+                        maxDate={new Date()}
+                        minDate={new Date(2023, 0, 0)}
+                        selected={currentYear}
+                        dateFormat="yyyy"
+                        onChange={handleDateChange}
+                        isClearable={false}
+                        className="rounded-md border-2 border-gray-300 text-center text-xl cursor-pointer"/>
+                </div>
                 <div className="overflow-x-auto">
                     <Bar
                         datasetIdKey={'deal_count'}
@@ -99,7 +165,17 @@ export default function DashboardPage() {
                         data={chartData}
                     />
                 </div>
-                <p>Januari</p>
+                <div className="flex items-center self-center">
+                    <DatePicker
+                        showMonthYearPicker={true}
+                        maxDate={new Date()}
+                        minDate={new Date(2023, 0, 1)}
+                        selected={new Date(currentMonth)}
+                        dateFormat="MMMM"
+                        onChange={handleMonthChange}
+                        isClearable={false}
+                        className="rounded-md border-2 border-gray-300 text-center text-xl cursor-pointer"/>
+                </div>
                 <div className="self-center overflow-x-auto">
                     {screenWidthSize > 900 ? <Pie
                         datasetIdKey={'nominal_count'}
@@ -132,15 +208,3 @@ export default function DashboardPage() {
         </>
     );
 };
-
-function shuffle<T>(arr: T[]) {
-    return arr.sort(() => Math.random() - 0.5);
-}
-
-function randomColor({count = 1} = {}) {
-    const colors = [];
-    for (let i = 0; i < count; i++) {
-        colors.push('#' + Math.floor(Math.random() * 16777215).toString(16));
-    }
-    return colors;
-}
